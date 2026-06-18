@@ -1,0 +1,102 @@
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+import Alpine from 'alpinejs';
+
+window.Pusher = Pusher;
+window.Alpine = Alpine;
+
+Alpine.start();
+
+
+/*
+|--------------------------------------------------------------------------
+| Reverb Runtime Configuration
+|--------------------------------------------------------------------------
+|
+| Production-safe runtime websocket resolver supporting:
+| - Local development
+| - HTTPS reverse proxies
+| - Docker/VPS deployments
+| - Cloudflare/Nginx proxying
+| - Laravel Reverb clustering
+|
+*/
+
+const scheme =
+    import.meta.env.VITE_REVERB_SCHEME ||
+    (window.location.protocol === 'https:' ? 'https' : 'http');
+
+const isSecure = scheme === 'https';
+
+const reverbHost =
+    import.meta.env.VITE_REVERB_HOST ||
+    window.location.hostname;
+
+/*
+|--------------------------------------------------------------------------
+| Port Resolution
+|--------------------------------------------------------------------------
+|
+| Priority:
+| 1. Explicit WS/WSS ports
+| 2. Shared Reverb port
+| 3. Protocol defaults
+|
+*/
+
+const wsPort = Number(
+    import.meta.env.VITE_REVERB_WS_PORT ||
+    import.meta.env.VITE_REVERB_PORT ||
+    8080
+);
+
+const wssPort = Number(
+    import.meta.env.VITE_REVERB_WSS_PORT ||
+    import.meta.env.VITE_REVERB_PORT ||
+    443
+);
+
+/*
+|--------------------------------------------------------------------------
+| Echo Bootstrap
+|--------------------------------------------------------------------------
+*/
+
+window.Echo = new Echo({
+    broadcaster: 'reverb',
+
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+
+    wsHost: reverbHost,
+
+    wsPort,
+
+    wssPort,
+
+    forceTLS: isSecure,
+
+    encrypted: isSecure,
+
+    disableStats: true,
+
+    enabledTransports: ['ws', 'wss'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Production Stability
+    |--------------------------------------------------------------------------
+    */
+
+    activityTimeout: 30000,
+
+    pongTimeout: 15000,
+
+    unavailableTimeout: 10000,
+});
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allow your team to quickly build robust real-time web applications.
+ */
+
+import './echo';
