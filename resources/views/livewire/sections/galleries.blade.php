@@ -45,8 +45,15 @@
                     {{-- Image Frame --}}
                     <div class="relative aspect-video w-full overflow-hidden bg-slate-900 rounded-none mb-3">
                         
-                        {{-- Pulling the first eager-loaded media item image, or falling back to an asset placeholder --}}
-                        <img src="{{ $gallery->media->first()?->getUrl() ?? asset('images/placeholder-gallery.jpg') }}"
+                        {{-- Prefer the article's real image fields first, then the featured media collection, then a safe placeholder --}}
+                        <img src="{{
+                            $gallery->featured_image_thumb_url
+                                ?: $gallery->getFirstMediaUrl('featured_image', 'thumb')
+                                ?: $gallery->getFirstMediaUrl('featured_image')
+                                ?: $gallery->getFirstMediaUrl('images')
+                                ?: $gallery->image_path
+                                ?: asset('images/placeholders/article-default.jpg')
+                        }}"
                             alt="{{ $gallery->title }}"
                             loading="lazy"
                             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 group-focus:scale-105">

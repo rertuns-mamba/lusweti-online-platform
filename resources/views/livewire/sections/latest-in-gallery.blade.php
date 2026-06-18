@@ -60,7 +60,14 @@
                            class="news-card group"
                            style="--i: {{ $loop->iteration }}">
                            
-                            <img src="{{ $article->getFirstMediaUrl('featured_image', 'thumb') ?: asset('images/placeholders/default.jpg') }}"
+                            <img src="{{
+                                $article->featured_image_thumb_url
+                                    ?: $article->getFirstMediaUrl('featured_image', 'thumb')
+                                    ?: $article->getFirstMediaUrl('featured_image')
+                                    ?: $article->getFirstMediaUrl('images')
+                                    ?: $article->image_path
+                                    ?: asset('images/placeholders/article-default.jpg')
+                            }}"
                                  alt="{{ $article->title }}"
                                  loading="lazy">
 

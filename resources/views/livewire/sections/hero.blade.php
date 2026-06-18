@@ -137,16 +137,20 @@
 
                     {{-- LATEST VIDEO WIDGET --}}
                     @if($activeVideo)
+                    @php
+                        preg_match('/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?\/]+)/', $activeVideo->video_url ?? '', $youtubeMatches);
+                        $youtubeId = $youtubeMatches[1] ?? null;
+                    @endphp
                     <section class="border-t-2 border-slate-900 pt-3">
                         <div class="mb-3">
                             <h2 class="text-xs font-black uppercase tracking-widest text-slate-900">Latest Video</h2>
                         </div>
                         <div class="aspect-video overflow-hidden bg-black">
-                            @if($activeVideo->is_youtube)
-                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ $activeVideo->youtube_id }}" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+                            @if($activeVideo->is_youtube && $youtubeId)
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ $youtubeId }}" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
                             @else
-                            <video src="{{ $activeVideo->video_url }}"
-                                poster="{{ $activeVideo->image_path ?? asset('images/placeholders/article-default.jpg') }}"
+                            <video src="{{ $activeVideo->video_url ?: $activeVideo->getFirstMediaUrl('videos') }}"
+                                poster="{{ $activeVideo->image_path ?: $activeVideo->getFirstMediaUrl('featured_image') ?: asset('images/placeholders/article-default.jpg') }}"
                                 preload="metadata"
                                 controls
                                 muted

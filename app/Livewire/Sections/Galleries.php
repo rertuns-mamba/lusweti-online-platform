@@ -38,7 +38,7 @@ class Galleries extends Component
         return Article::query()
             ->where('category_id', $this->section->category_id)
             ->where('is_visible', true)
-            ->with(['media']) // Eager-load media attachments to avoid N+1 queries
+            ->with(['media', 'category']) // Eager-load media and category data to avoid N+1 queries
             ->latest('published_at')
             ->take($this->settings['limit'] ?? 4)
             ->get();

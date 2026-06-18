@@ -55,7 +55,8 @@ class MagazineHome extends Component
             });
 
         // 2. Fetch recent active videos
-        $videos = Video::where('is_active', true)
+        $videos = Video::with(['media'])
+            ->where('is_active', true)
             // Optional: Uncomment below if your videos table contains a category_id column
             // ->when($category, function ($query) use ($category) {
             //     return $query->where('category_id', $category->id);

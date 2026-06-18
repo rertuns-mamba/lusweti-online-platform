@@ -55,13 +55,43 @@
         @foreach($feedItems as $item)
         @php
         $isVideo = $item->type === 'video';
-        $targetUrl = $isVideo ? route('video.show', $item->id) : $item->external_url;
+
+        $videoUrl = $isVideo
+            ? ($item->video_url ?: ($item->youtube_id ? "https://www.youtube.com/watch?v={$item->youtube_id}" : null))
+            : null;
+
+        $youtubeId = null;
+        if ($item->video_url) {
+            preg_match('/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?\/]+)/', $item->video_url, $youtubeMatches);
+            $youtubeId = $youtubeMatches[1] ?? null;
+        }
+        if (! $youtubeId && ! empty($item->youtube_id)) {
+            $youtubeId = $item->youtube_id;
+        }
+
+        $targetUrl = $isVideo
+            ? ($videoUrl ?: '#')
+            : $item->external_url;
 
         $posterUrl = $isVideo
-        ? asset('storage/thumbnails/poster_' . $item->video_filename . '.jpg')
-        : ($item->getFirstMediaUrl('featured_image') ?: $item->featured_image_thumb_url ?: asset('images/fallback.jpg'));
+            ? ($item->is_youtube && $youtubeId
+                ? "https://i.ytimg.com/vi/{$youtubeId}/maxresdefault.jpg"
+                : ($item->getFirstMediaUrl('custom_thumbnail')
+                    ?: $item->getFirstMediaUrl('featured_image')
+                    ?: $item->featured_image_thumb_url
+                    ?: $item->image_path
+                    ?: $item->getFirstMediaUrl('images')
+                    ?: asset('images/placeholders/article-default.jpg')))
+            : ($item->featured_image_thumb_url
+                ?: $item->getFirstMediaUrl('featured_image', 'thumb')
+                ?: $item->getFirstMediaUrl('featured_image')
+                ?: $item->getFirstMediaUrl('images')
+                ?: $item->image_path
+                ?: asset('images/placeholders/article-default.jpg'));
 
-        $previewUrl = $isVideo ? asset('storage/videos/preview_' . $item->video_filename . '.mp4') : null;
+        $previewUrl = $isVideo && !$item->is_youtube
+            ? ($item->getFirstMediaUrl('local_video') ?: $videoUrl)
+            : null;
         @endphp
 
         {{-- Article Card: Added fixed widths and shrink-0 for sliding --}}

@@ -31,7 +31,7 @@ class LatestInGallery extends Component
         $articles = collect();
 
         if ($this->section->category_id) {
-            $articles = Article::with(['page', 'media'])
+            $articles = Article::with(['page', 'category', 'media'])
                 ->where('category_id', $this->section->category_id)
                 ->where('is_visible', true) // Added safety check for published items
                 ->latest('published_at')

@@ -90,9 +90,11 @@
                                 <span class="text-sm font-bold text-neutral-900">Share:</span>
                                 {{-- Add share icons here --}}
                             </div>
-                            <a href="{{ route('articles.show', $article->id) }}" class="text-sm font-bold text-red-600 hover:text-red-700 transition-colors">
-                                Read full page &rarr;
-                            </a>
+                            @if($article->external_url)
+                                <a href="{{ $article->external_url }}" class="text-sm font-bold text-red-600 hover:text-red-700 transition-colors">
+                                    Read source &rarr;
+                                </a>
+                            @endif
                         </div>
                     @else
                         {{-- Loading State --}}

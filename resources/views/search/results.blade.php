@@ -12,14 +12,27 @@
                         {{ $result['type'] }}
                     </span>
                     
-                    {{-- The Livewire Trigger Button --}}
-                    <button 
-                        type="button"
-                        wire:click="$dispatch('open-article-preview', { article: {{ $result['id'] }} })" 
-                        class="block text-left text-lg text-neutral-100 hover:text-red-500 transition-colors w-full font-bold mt-2 font-sans"
-                    >
-                        {{ $result['title'] }}
-                    </button>
+                    @if($result['type'] === 'Article')
+                        {{-- The Livewire Trigger Button --}}
+                        <button
+                            type="button"
+                            wire:click="$dispatch('open-article-preview', { article: {{ $result['id'] }} })"
+                            class="block text-left text-lg text-neutral-100 hover:text-red-500 transition-colors w-full font-bold mt-2 font-sans"
+                        >
+                            {{ $result['title'] }}
+                        </button>
+                    @elseif($result['url'])
+                        <a
+                            href="{{ $result['url'] }}"
+                            class="block text-left text-lg text-neutral-100 hover:text-red-500 transition-colors w-full font-bold mt-2 font-sans"
+                        >
+                            {{ $result['title'] }}
+                        </a>
+                    @else
+                        <span class="block text-left text-lg text-neutral-100 w-full font-bold mt-2 font-sans">
+                            {{ $result['title'] }}
+                        </span>
+                    @endif
                 </div>
             @endforeach
 

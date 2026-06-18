@@ -33,6 +33,10 @@
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 
             @foreach($this->collectionItems as $video)
+            @php
+                preg_match('/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?\/]+)/', $video->video_url ?? '', $youtubeMatches);
+                $youtubeId = $youtubeMatches[1] ?? ($video->youtube_id ?? null);
+            @endphp
             {{-- Alpine.js Hover-to-Play Component --}}
             <article
                 wire:key="video-teaser-{{ $video->id }}"
@@ -63,17 +67,17 @@
 
                     <div class="relative aspect-video w-full overflow-hidden bg-slate-900 rounded-none mb-3">
 
-                        @if($video->is_youtube)
-                        <img src="https://i.ytimg.com/vi/{{ $video->youtube_id }}/maxresdefault.jpg"
+                        @if($video->is_youtube && $youtubeId)
+                        <img src="https://i.ytimg.com/vi/{{ $youtubeId }}/maxresdefault.jpg"
                             alt="{{ $video->title }}"
                             loading="lazy"
                             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 group-focus:scale-105">
                         @else
 
-                        {{-- Swap raw video_url for Spatie's getUrl() --}}
+                        {{-- Prefer the explicitly seeded local video collection for Video models --}}
                         <video
                             x-ref="videoElement"
-                            src="{{ $video->getFirstMediaUrl('videos') }}"
+                            src="{{ $video->getFirstMediaUrl('local_video') ?: $video->video_url }}"
                             preload="metadata"
                             loop
                             muted
