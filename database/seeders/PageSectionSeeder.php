@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Page;
 use App\Models\Category;
+use App\Models\Page;
+use Illuminate\Database\Seeder;
 
 class PageSectionSeeder extends Seeder
 {
@@ -12,23 +12,22 @@ class PageSectionSeeder extends Seeder
     {
         // Fetch all categories once.
         $cats = Category::all()->keyBy('slug');
-        
+
         // Inside PageSectionSeeder.php
         $getCatId = function ($slug) {
             $category = Category::where('slug', $slug)->first();
 
             // If it doesn't exist, create it so the seed doesn't crash
-            if (!$category) {
+            if (! $category) {
                 $category = Category::create([
                     'name' => ucwords(str_replace('-', ' ', $slug)),
                     'slug' => $slug,
-                    'is_active' => true
+                    'is_active' => true,
                 ]);
             }
+
             return $category->id;
         };
-
-        
 
         // ==========================================
         // 2. THE SPORTS PAGE
@@ -38,63 +37,53 @@ class PageSectionSeeder extends Seeder
         $sportsSections = [
 
             [
-                'title'       => 'Top Stories',
-                'component'   => 'sections.hero',
-                'model_type'  => 'App\Models\Article',
-                'category_id' => $getCatId('hero'),
-                'limit'       => 10,
-                'sort_order'  => 2,
-                'is_active'   => true,
-                'settings'    => ['show_sidebar' => true, 'show_video' => true],
-            ],
-            [
-                'title'       => 'Spoti Kenya',
-                'component'   => 'sections.magazine-home',
-                'model_type'  => 'App\Models\Article',
+                'title' => 'Spoti Kenya',
+                'component' => 'sections.magazine-home',
+                'model_type' => 'App\Models\Article',
                 'category_id' => $getCatId('magazine'),
-                'limit'       => 10,
-                'sort_order'  => 1,
-                'is_active'   => true,
-                'settings'    => ['show_sidebar' => true, 'show_video' => false],
+                'limit' => 10,
+                'sort_order' => 2,
+                'is_active' => true,
+                'settings' => ['show_sidebar' => true, 'show_video' => false],
             ],
+
             [
-                'title'       => 'Video Highlights',
-                'component'   => 'sections.videos',
-                'model_type'  => 'App\Models\Article',
+                'title' => 'Video Highlights',
+                'component' => 'sections.videos',
+                'model_type' => 'App\Models\Article',
                 'category_id' => $getCatId('videos'),
-                'limit'       => 9,
-                'sort_order'  => 5,
-                'is_active'   => true,
+                'limit' => 9,
+                'sort_order' => 5,
+                'is_active' => true,
             ],
             [
-                'title'       => 'International Sports',
-                'component'   => 'sections.spoti-majuu-block',
-                'model_type'  => 'App\Models\Article',
+                'title' => 'International Sports',
+                'component' => 'sections.spoti-majuu-block',
+                'model_type' => 'App\Models\Article',
                 'category_id' => $getCatId('spoti-majuu'),
-                'limit'       => 9,
-                'sort_order'  => 3,
-                'is_active'   => true,
+                'limit' => 9,
+                'sort_order' => 3,
+                'is_active' => true,
             ],
 
-
             [
-                'title'       => 'Gallery Highlights',
-                'component'   => 'sections.galleries',
-                'model_type'  => 'App\Models\Article',
+                'title' => 'Gallery Highlights',
+                'component' => 'sections.galleries',
+                'model_type' => 'App\Models\Article',
                 'category_id' => $getCatId('gallery'),
-                'limit'       => 9,
-                'sort_order'  => 6,
-                'is_active'   => true,
+                'limit' => 9,
+                'sort_order' => 6,
+                'is_active' => true,
             ],
 
             [
-                'title'       => 'Galla Sports',
-                'component'   => 'sections.latest-in-gallery',
-                'model_type'  => 'App\Models\Article',
+                'title' => 'Galla Sports',
+                'component' => 'sections.latest-in-gallery',
+                'model_type' => 'App\Models\Article',
                 'category_id' => $getCatId('latest-in-gallery'),
-                'limit'       => 9,
-                'sort_order'  => 2,
-                'is_active'   => true,
+                'limit' => 9,
+                'sort_order' => 2,
+                'is_active' => true,
             ],
             // {{-- Optional: Add footer to sports page content stack here if needed --}}
         ];
@@ -110,54 +99,152 @@ class PageSectionSeeder extends Seeder
 
         $hadithiSections = [
             [
-                'title'       => 'Hadithi Latest',
-                'component'   => 'sections.hadithi-grid',
-                'model_type'  => 'App\Models\Article',
+                'title' => 'Top Stories',
+                'component' => 'sections.hero',
+                'model_type' => 'App\Models\Article',
+                'category_id' => $getCatId('hero'),
+                'limit' => 10,
+                'sort_order' => 1,
+                'is_active' => true,
+                'settings' => ['show_sidebar' => true, 'show_video' => true],
+            ],
+            [
+                'title' => 'Hadithi Latest',
+                'component' => 'sections.hadithi-grid',
+                'model_type' => 'App\Models\Article',
                 'category_id' => $getCatId('hadithi'),
-                'limit'       => 10,
-                'sort_order'  => 1,
-                'is_active'   => true,
+                'limit' => 10,
+                'sort_order' => 2,
+                'is_active' => true,
             ],
             [
-                'title'       => 'International Sports',
-                'component'   => 'sections.spoti-majuu-block',
-                'model_type'  => 'App\Models\Article',
+                'title' => 'International Sports',
+                'component' => 'sections.spoti-majuu-block',
+                'model_type' => 'App\Models\Article',
                 'category_id' => $getCatId('spoti-majuu'),
-                'limit'       => 9,
-                'sort_order'  => 3,
-                'is_active'   => true,
+                'limit' => 9,
+                'sort_order' => 3,
+                'is_active' => true,
             ],
+
             [
-                'title'       => 'Technology News',
-                'component'   => 'sections.editorial-grid-block',
-                'model_type'  => 'App\Models\Article',
-                'category_id' => $getCatId('business'),
-                'limit'       => 9,
-                'sort_order'  => 4,
-                'is_active'   => true,
-            ],
-            [
-                'title'       => 'Video Highlights',
-                'component'   => 'sections.videos',
-                'model_type'  => 'App\Models\Article',
-                'category_id' => $getCatId('videos'),
-                'limit'       => 9,
-                'sort_order'  => 5,
-                'is_active'   => true,
-            ],
-            [
-                'title'       => 'Gallery Highlights',
-                'component'   => 'sections.galleries',
-                'model_type'  => 'App\Models\Article',
+                'title' => 'Gallery Highlights',
+                'component' => 'sections.galleries',
+                'model_type' => 'App\Models\Article',
                 'category_id' => $getCatId('gallery'),
-                'limit'       => 9,
-                'sort_order'  => 6,
-                'is_active'   => true,
+                'limit' => 9,
+                'sort_order' => 4,
+                'is_active' => true,
             ],
+
+            [
+                'title' => 'Technology News',
+                'component' => 'sections.editorial-grid-block',
+                'model_type' => 'App\Models\Article',
+                'category_id' => $getCatId('business'),
+                'limit' => 9,
+                'sort_order' => 5,
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Video Highlights',
+                'component' => 'sections.videos',
+                'model_type' => 'App\Models\Article',
+                'category_id' => $getCatId('videos'),
+                'limit' => 9,
+                'sort_order' => 6,
+                'is_active' => true,
+            ],
+
         ];
 
         foreach ($hadithiSections as $section) {
             $hadithiPage->sections()->updateOrCreate(['title' => $section['title']], $section);
+        }
+
+        // ==========================================
+        // 4. THE GALLERY PAGE
+        // ==========================================
+        $galleryPage = Page::updateOrCreate(['slug' => 'gallery'], ['title' => 'Gallery']);
+
+        $gallerySections = [
+
+            [
+                'title' => 'Gallery News',
+                'component' => 'sections.editorial-grid-block',
+                'model_type' => 'App\Models\Article',
+                'category_id' => $getCatId('business'),
+                'limit' => 10,
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Top Stories',
+                'component' => 'sections.magazine-home',
+                'model_type' => 'App\Models\Article',
+                'category_id' => $getCatId('magazine'),
+                'limit' => 10,
+                'sort_order' => 2,
+                'is_active' => true,
+                'settings' => ['show_sidebar' => true, 'show_video' => true],
+            ],
+            [
+                'title' => 'International Sports',
+                'component' => 'sections.spoti-majuu-block',
+                'model_type' => 'App\Models\Article',
+                'category_id' => $getCatId('spoti-majuu'),
+                'limit' => 9,
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Recent Galleries',
+                'component' => 'sections.galleries',
+                'model_type' => 'App\Models\Article',
+                'category_id' => $getCatId('gallery'),
+                'limit' => 10,
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+            
+           
+
+        ];
+
+        foreach ($gallerySections as $section) {
+            $galleryPage->sections()->updateOrCreate(['title' => $section['title']], $section);
+        }
+
+        // ==========================================
+        // 4. THE VIDEOS PAGE
+        // ==========================================
+        $videoPage = Page::updateOrCreate(['slug' => 'video'], ['title' => 'Videos']);
+
+        $videoSections = [
+            [
+                'title' => 'Top Stories',
+                'component' => 'sections.hero',
+                'model_type' => 'App\Models\Article',
+                'category_id' => $getCatId('hero'),
+                'limit' => 10,
+                'sort_order' => 1,
+                'is_active' => true,
+                'settings' => ['show_sidebar' => true, 'show_video' => true],
+            ],
+            [
+                'title' => 'Recent Videos',
+                'component' => 'sections.videos',
+                'model_type' => 'App\Models\Article',
+                'category_id' => $getCatId('videos'),
+                'limit' => 10,
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+
+        ];
+
+        foreach ($videoSections as $section) {
+            $videoPage->sections()->updateOrCreate(['title' => $section['title']], $section);
         }
     }
 }

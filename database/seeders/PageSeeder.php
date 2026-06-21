@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Page;
+use Illuminate\Database\Seeder;
 
 class PageSeeder extends Seeder
 {
@@ -26,18 +25,6 @@ class PageSeeder extends Seeder
             'is_active' => true,
             'sort_order' => 2,
         ]);
-        Page::create([
-            'title' => 'Home',
-            'slug' => 'home',
-            'is_active' => true,
-            'sort_order' => 1,
-        ]);
 
-        Page::create([
-            'title' => 'News',
-            'slug' => 'news',
-            'is_active' => true,
-            'sort_order' => 4,
-        ]);
     }
 }

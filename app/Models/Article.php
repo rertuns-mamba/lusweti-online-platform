@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -61,6 +62,18 @@ class Article extends Model implements HasMedia
 
     protected static function booted(): void
     {
+        static::saving(function (Article $article) {
+            if (empty($article->slug) && !empty($article->title)) {
+                $article->slug = Str::slug($article->title);
+                $originalSlug = $article->slug;
+                $counter = 1;
+
+                while (Article::where('slug', $article->slug)->where('id', '!=', $article->id)->exists()) {
+                    $article->slug = $originalSlug . '-' . $counter++;
+                }
+            }
+        });
+
         static::saved(function (Article $article) {
             try {
                 if (! app()->runningInConsole()) {

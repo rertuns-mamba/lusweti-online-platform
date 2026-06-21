@@ -18,7 +18,7 @@ class GalleryForm
                 Section::make('Gallery Metadata')->schema([
                     TextInput::make('title')->required(),
                     Select::make('category_id')
-                        ->relationship('category', 'title')
+                        ->relationship('category', 'name')
                         ->required(),
                     Toggle::make('is_visible')->default(true),
                 ]),

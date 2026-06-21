@@ -13,14 +13,17 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class HadithiResource extends Resource
 {
     protected static ?string $model = Hadithi::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-book-open';
 
-    protected static ?string $recordTitleAttribute = 'Hadithi';
+    protected static string | \UnitEnum | null $navigationGroup = 'Religious Content';
+
+    protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Schema $schema): Schema
     {

@@ -13,14 +13,17 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ExternalArticleResource extends Resource
 {
     protected static ?string $model = ExternalArticle::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-globe-alt';
 
-    protected static ?string $recordTitleAttribute = 'ExternalArticle';
+    protected static string | \UnitEnum | null $navigationGroup = 'Content Management';
+
+    protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Schema $schema): Schema
     {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -18,6 +19,21 @@ class Gallery extends Model implements HasMedia
 
     protected function casts(): array {
         return ['is_visible' => 'boolean', 'published_at' => 'datetime'];
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Gallery $gallery) {
+            if (empty($gallery->slug) && !empty($gallery->title)) {
+                $gallery->slug = Str::slug($gallery->title);
+                $originalSlug = $gallery->slug;
+                $counter = 1;
+
+                while (Gallery::where('slug', $gallery->slug)->where('id', '!=', $gallery->id)->exists()) {
+                    $gallery->slug = $originalSlug . '-' . $counter++;
+                }
+            }
+        });
     }
 
 

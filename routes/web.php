@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StreamController;
+use App\Http\Controllers\VideoController;
 use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
@@ -54,7 +56,7 @@ Route::get('/', function () {
         $query->where('is_active', true)->orderBy('sort_order');
     }])->where('slug', 'home')->first();
 
-    if (!$page) {
+    if (! $page) {
         return view('welcome');
     }
 
@@ -66,6 +68,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
+
+// Videos routes
+Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
+Route::get('/videos/{slug}', [VideoController::class, 'show'])->name('videos.show');
+
+// Galleries routes
+Route::get('/galleries', [GalleryController::class, 'index'])->name('galleries.index');
+Route::get('/galleries/{slug}', [GalleryController::class, 'show'])->name('galleries.show');
 
 // Article show route - BBC style article display
 Route::get('/{pageSlug}/{articleSlug}', [ArticleController::class, 'show'])->name('article.show');

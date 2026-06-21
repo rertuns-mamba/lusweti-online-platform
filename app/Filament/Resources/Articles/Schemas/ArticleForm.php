@@ -38,12 +38,11 @@ class ArticleForm
                             ]),
 
                         TextInput::make('slug')
-                            ->required()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true)
                             ->alphaDash()
+                            ->helperText('Auto-generated from title if left blank.')
                             ->validationMessages([
-                                'required' => 'The slug is required.',
                                 'unique' => 'This slug is already in use.',
                                 'alpha_dash' => 'The slug may only contain letters, numbers, dashes, and underscores.',
                             ]),

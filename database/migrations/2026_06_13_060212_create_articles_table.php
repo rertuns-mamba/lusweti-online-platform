@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('page_id')->nullable()->constrained()->nullOnDelete();
 
             // 2. Core Content & Routing
-            $table->string('title');
+            $table->text('title');
             $table->string('slug')->unique();
             $table->string('topic_label')->nullable(); // e.g., "LIVE", "BREAKING"
             $table->text('summary')->nullable();

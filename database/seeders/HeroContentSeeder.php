@@ -103,17 +103,7 @@ class HeroContentSeeder extends Seeder
                 'is_active' => true,
                 'is_visible' => true,
             ],
-            [
-                'title' => 'Gallery Highlights',
-                'category_id' => $categoryMap['gallery'],
-                'layout_type' => 'sections.galleries',
-                'component' => 'sections.galleries',
-                'model_type' => Article::class,
-                'limit' => 9,
-                'sort_order' => 5,
-                'is_active' => true,
-                'is_visible' => true,
-            ],
+
         ];
 
         foreach ($homeSections as $section) {
