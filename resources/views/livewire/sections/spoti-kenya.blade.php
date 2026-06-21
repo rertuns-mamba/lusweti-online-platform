@@ -29,7 +29,7 @@
             <div class="lg:col-span-1 border-b border-slate-200 pb-6 lg:border-b-0 lg:pb-0">
                 @php $heroItem = $this->dynamicLayoutColumns['hero']; @endphp
 
-                <a href="/{{ $this->page->slug }}/{{ $heroItem->slug }}"
+                <a href="{{ route('article.show', [$this->page->slug, $heroItem->slug]) }}"
                     wire:navigate
                     class="group block h-full bg-transparent">
 
@@ -65,7 +65,7 @@
                 <ul class="divide-y divide-slate-100">
                     @foreach($this->dynamicLayoutColumns['thumbnails'] as $thumbItem)
                     <li class="py-4 first:pt-0 last:pb-0">
-                        <a href="/{{ $this->page->slug }}/{{ $thumbItem->slug }}"
+                        <a href="{{ route('article.show', [$this->page->slug, $thumbItem->slug]) }}"
                             wire:navigate
                             class="group flex gap-4 items-start bg-transparent">
 
@@ -98,7 +98,7 @@
                 <ul class="divide-y divide-slate-200 border-t-2 border-slate-900 lg:border-t-0">
                     @foreach($this->dynamicLayoutColumns['textOnly'] as $index => $textItem)
                     <li class="py-3.5 first:pt-0 last:pb-0">
-                        <a href="/{{ $this->page->slug }}/{{ $textItem->slug }}"
+                        <a href="{{ route('article.show', [$this->page->slug, $textItem->slug]) }}"
                             wire:navigate
                             class="group block bg-transparent">
 

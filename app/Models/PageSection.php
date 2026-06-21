@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use App\Concerns\Searchable;
+use App\Events\PageSectionUpdated;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use App\Concerns\Searchable;
 
-class PageSection extends Model 
+class PageSection extends Model
 {
-
-use Searchable;
+    use Searchable;
 
     protected $guarded = ['id'];
+
     protected $fillable = [
         'page_id',
         'title',
@@ -29,9 +31,9 @@ use Searchable;
     ];
 
     protected $casts = [
-        'settings'   => 'array',
-        'is_active'  => 'boolean',
-        'limit'      => 'integer',
+        'settings' => 'array',
+        'is_active' => 'boolean',
+        'limit' => 'integer',
         'sort_order' => 'integer',
         'is_visible' => 'boolean',
     ];
@@ -81,7 +83,6 @@ use Searchable;
         return $query;
     }
 
-
     public function componentExists(): bool
     {
         if (blank($this->component)) {
@@ -89,11 +90,38 @@ use Searchable;
         }
 
         $className = collect(explode('.', $this->component))
-            ->map(fn($segment) => Str::studly($segment))
+            ->map(fn ($segment) => Str::studly($segment))
             ->join('\\');
 
         return class_exists("App\\Livewire\\{$className}");
     }
 
-    
+    protected static function booted(): void
+    {
+        static::saved(function (PageSection $section) {
+            try {
+                if (! app()->runningInConsole()) {
+                    broadcast(new PageSectionUpdated($section))->toOthers();
+                }
+            } catch (\Exception $e) {
+                Log::error('Failed to broadcast page section update', [
+                    'section_id' => $section->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        });
+
+        static::deleted(function (PageSection $section) {
+            try {
+                if (! app()->runningInConsole()) {
+                    broadcast(new PageSectionUpdated($section))->toOthers();
+                }
+            } catch (\Exception $e) {
+                Log::error('Failed to broadcast page section deletion', [
+                    'section_id' => $section->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        });
+    }
 }

@@ -19,12 +19,24 @@ class ExternalArticleForm
                 TextInput::make('external_url')->url()->required(),
                 Select::make('category_id')->relationship('category', 'name')->required(),
             ]),
+            
             Section::make('Media')->schema([
                 SpatieMediaLibraryFileUpload::make('featured_image')
                     ->collection('featured_image')
                     ->image()
                     ->imageEditor(),
             ]),
-            ]);
+
+            TextInput::make('slug')
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true)
+                            ->alphaDash()
+                            ->validationMessages([
+                                'required' => 'The slug is required.',
+                                'unique' => 'This slug is already in use.',
+                                'alpha_dash' => 'The slug may only contain letters, numbers, dashes, and underscores.',
+                            ]),
+            ])->columns(3);
     }
 }

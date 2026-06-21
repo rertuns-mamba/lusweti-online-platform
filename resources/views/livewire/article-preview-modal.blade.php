@@ -38,12 +38,12 @@
                 >
                     
                     @if($article)
-                        {{-- Close Button (Sticky to top right of modal) --}}
+                        {{-- Close Button --}}
                         <div class="absolute right-0 top-0 pr-4 pt-4 z-10">
                             <button 
                                 type="button" 
                                 wire:click="closeModal"
-                                class="bg-white text-neutral-400 hover:text-red-600 focus:outline-none transition-colors"
+                                class="bg-white text-neutral-400 hover:text-red-600 focus:outline-none transition-colors p-1 rounded"
                             >
                                 <span class="sr-only">Close</span>
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -52,46 +52,75 @@
                             </button>
                         </div>
 
-                        {{-- Article Content (The BBC Aesthetic) --}}
+                        {{-- Article Content Area --}}
                         <div class="bg-white px-6 pb-8 pt-10 sm:px-12 sm:pb-12 sm:pt-14">
-                            <article class="max-w-2xl mx-auto">
+                            <div class="max-w-3xl mx-auto">
+                                
                                 {{-- Meta tag --}}
                                 <div class="mb-4 flex items-center gap-3">
                                     <span class="text-xs font-bold text-red-600 uppercase tracking-wider">
                                         {{ $article->category->name ?? 'News' }}
                                     </span>
                                     <span class="text-xs text-neutral-500 font-sans">
-                                        {{ $article->created_at->format('j M Y, H:i T') }}
+                                        {{ $article->published_at ? \Carbon\Carbon::parse($article->published_at)->format('j M Y, H:i T') : $article->created_at->format('j M Y, H:i T') }}
                                     </span>
                                 </div>
 
-                                {{-- Title (Heavy, sans-serif) --}}
+                                {{-- Title --}}
                                 <h1 class="text-3xl sm:text-4xl font-bold text-neutral-900 leading-tight mb-6 font-sans tracking-tight">
                                     {{ $article->title }}
                                 </h1>
 
+                                {{-- DYNAMIC MEDIA PREVIEW HUB (Better Visuals Execution) --}}
+                                <div class="my-6 w-full bg-black clear-both">
+                                    @if($article->video_url || $article->is_youtube)
+                                        {{-- Video Rendering Module --}}
+                                        @php
+                                            preg_match('/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?\/]+)/', $article->video_url ?? '', $modalYoutubeMatches);
+                                            $modalYoutubeId = $modalYoutubeMatches[1] ?? ($article->youtube_id ?? null);
+                                        @endphp
+
+                                        <div class="relative aspect-video w-full overflow-hidden shadow-md">
+                                            @if(($article->is_youtube || str_contains($article->video_url, 'youtube.com') || str_contains($article->video_url, 'youtu.be')) && $modalYoutubeId)
+                                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/{{ $modalYoutubeId }}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                            @else
+                                                <video src="{{ $article->getFirstMediaUrl('local_video') ?: $article->video_url }}" controls autoplay playsinline class="w-full h-full object-contain"></video>
+                                            @endif
+                                        </div>
+                                    @elseif($article->getFirstMediaUrl('featured_image') || $article->image_path || $article->getFirstMediaUrl('images'))
+                                        {{-- Image/Gallery Feature Module --}}
+                                        <div class="relative aspect-video w-full overflow-hidden shadow-md">
+                                            <img src="{{
+                                                $article->getFirstMediaUrl('featured_image')
+                                                    ?: $article->getFirstMediaUrl('images')
+                                                    ?: $article->image_path
+                                            }}" class="w-full h-full object-cover" alt="{{ $article->title }}">
+                                        </div>
+                                    @endif
+                                </div>
+
                                 {{-- Lead Paragraph (Standfirst) --}}
                                 @if($article->excerpt)
-                                    <p class="text-lg text-neutral-700 font-serif mb-8 leading-relaxed italic">
+                                    <p class="text-lg text-neutral-700 font-serif mb-6 leading-relaxed italic border-l-4 border-slate-300 pl-4">
                                         {{ $article->excerpt }}
                                     </p>
                                 @endif
 
-                                {{-- Main Body (Serif for readability) --}}
+                                {{-- Main Body Text --}}
                                 <div class="prose prose-lg prose-neutral max-w-none font-serif text-neutral-800 leading-relaxed marker:text-red-600">
                                     {!! $article->content !!}
                                 </div>
-                            </article>
+                            </div>
                         </div>
                         
                         {{-- Footer Action Area --}}
                         <div class="bg-neutral-50 border-t border-neutral-200 px-6 py-4 sm:px-12 flex justify-between items-center">
                             <div class="flex items-center space-x-3">
                                 <span class="text-sm font-bold text-neutral-900">Share:</span>
-                                {{-- Add share icons here --}}
+                                {{-- Social media handles can be injected here --}}
                             </div>
                             @if($article->external_url)
-                                <a href="{{ $article->external_url }}" class="text-sm font-bold text-red-600 hover:text-red-700 transition-colors">
+                                <a href="{{ $article->external_url }}" target="_blank" class="text-sm font-bold text-red-600 hover:text-red-700 transition-colors">
                                     Read source &rarr;
                                 </a>
                             @endif
@@ -99,7 +128,7 @@
                     @else
                         {{-- Loading State --}}
                         <div class="p-12 text-center text-neutral-500 font-sans animate-pulse">
-                            Loading article...
+                            Loading item details...
                         </div>
                     @endif
 

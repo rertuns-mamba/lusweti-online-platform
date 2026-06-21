@@ -7,6 +7,7 @@
         | Dynamic Radius Allocation
         |--------------------------------------------------------------------------
         | Maintains proper 3D transform depth balancing based on item totals.
+        |
         */
         if ($count <= 4) {
             $mobileRadius = 140;
@@ -27,23 +28,21 @@
 
         {{-- Category Identity Banner --}}
         @if($this->category)
-                <div class="mx-auto max-w-7xl mx-auto  mb-6">
-                    <div class="border-t-2 border-[#B80000] pt-3">
-                        <div class="flex items-end justify-between border-b-2 border-gray-900 pb-2">
-                            <a href="/ms/{{ $this->category->slug }}"
-                                wire:navigate
-                                class="inline-block px-3 py-1 text-xs font-black uppercase tracking-widest rounded-none transition-opacity hover:opacity-90"
-                                style="background: {{ $this->category->bg_color ?? '#e50000' }}; color: {{ $this->category->text_color ?? '#ffffff' }};">
-                                {{ $this->category->name }}
-                            </a>
-                        </div>
+            <div class="mx-auto max-w-7xl mb-6 px-4 md:px-0">
+                <div class="border-t-2 border-[#B80000] pt-3">
+                    <div class="flex items-end justify-between border-b-2 border-gray-900 pb-2">
+                        <a href="/ms/{{ $this->category->slug }}"
+                           wire:navigate
+                           class="inline-block px-3 py-1 text-xs font-black uppercase tracking-widest rounded-none transition-opacity hover:opacity-90"
+                           style="background: {{ $this->category->bg_color ?? '#e50000' }}; color: {{ $this->category->text_color ?? '#ffffff' }};">
+                            {{ $this->category->name }}
+                        </a>
                     </div>
                 </div>
+            </div>
         @endif
 
-        
-
-        {{-- 3D Rotation Engine --}}
+        {{-- 3D Rotation Engine (Interactive Modal Trigger Configuration) --}}
         @if($articles->isNotEmpty())
             <div class="news-stage">
                 <div class="news-spinner"
@@ -55,9 +54,9 @@
                      ">
                      
                     @foreach($articles as $article)
-                        <a href="/{{ $article->page->slug ?? 'category' }}/{{ $article->slug }}"
+                        <a href="{{ route('article.show', [$this->category->slug ?? 'news', $article->slug]) }}"
                            wire:navigate
-                           class="news-card group"
+                           class="news-card group cursor-pointer"
                            style="--i: {{ $loop->iteration }}">
                            
                             <img src="{{
@@ -94,6 +93,4 @@
         @endif
 
     </section>
-
-    
 </div>

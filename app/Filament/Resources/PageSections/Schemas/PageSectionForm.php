@@ -20,22 +20,58 @@ class PageSectionForm
                     ->relationship('page', 'title')
                     ->searchable()
                     ->preload()
-                    ->required(),
+                    ->required()
+                    ->validationMessages([
+                        'required' => 'The page is required.',
+                    ]),
 
                 TextInput::make('title')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->minLength(3)
+                    ->validationMessages([
+                        'required' => 'The section title is required.',
+                        'min' => 'The title must be at least 3 characters.',
+                        'max' => 'The title cannot exceed 255 characters.',
+                    ]),
 
                 Select::make('component')
                     ->label('Section Layout Style')
+                    ->live()
                     ->options([
                         'sections.magazine-home' => 'Magazine Master Layout',
-                        'sections.hero-news'            => 'Hero News',
-                        'sections.spoti-kenya'          => 'Spoti Kenya Custom Block',
-                        'sections.business-news'        => 'Business News Custom Block',
-                        'sections.featured-articles'    => 'Featured Articles',
+                        'sections.hero' => 'Hero Section',
+                        'sections.spoti-kenya' => 'Spoti Kenya Custom Block',
+                        'sections.spoti-majuu-block' => 'Spoti Majuu Block',
+                        'sections.featured-articles' => 'Featured Articles',
+                        'sections.editorial-grid-block' => 'Editorial Grid Block',
+                        'sections.breaking-news' => 'Breaking News',
+                        'sections.galleries' => 'Galleries',
+                        'sections.videos' => 'Videos',
+                        'sections.external-feed' => 'External Feed',
                     ])
-                    ->required(),
+                    ->required()
+                    ->validationMessages([
+                        'required' => 'The component is required.',
+                    ]),
+
+                Select::make('model_type')
+                    ->label('Content Type')
+                    ->options([
+                        'App\Models\Article' => 'Articles',
+                        'App\Models\Video' => 'Videos',
+                    ])
+                    ->required()
+                    ->validationMessages([
+                        'required' => 'The content type is required.',
+                    ]),
+
+                Select::make('category_id')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->nullable()
+                    ->helperText('Filter content by category (optional)'),
 
                 KeyValue::make('settings')
                     ->label('Section Filters & Configurations')
@@ -46,33 +82,13 @@ class PageSectionForm
 
                 TextInput::make('sort_order')
                     ->numeric()
-                    ->default(0),
+                    ->default(0)
+                    ->minValue(0)
+                    ->helperText('Lower numbers appear first.'),
 
                 Toggle::make('is_active')
+                    ->label('Active')
                     ->default(true),
-
-
-                Section::make('Section Configuration')->schema([
-                    TextInput::make('title')->required(),
-
-                    Select::make('component')
-                        ->options([
-                            'sections.three-column' => 'Standard 3-Column Grid',
-                            'sections.magazine-home' => 'BBC Magazine Layout', // <-- Added
-                        ])
-                        ->reactive() // Make it reactive so we can show/hide settings below
-                        ->required(),
-
-                    Select::make('model_type')
-                        ->options([
-                            'App\Models\Article' => 'Articles',
-                            'App\Models\Video' => 'Videos',
-                        ])->required(),
-
-                    Select::make('category_id')
-                        ->relationship('category', 'name')
-                        ->nullable(),
-                ])->columns(2),
 
                 // THE POWER OF JSON SETTINGS
                 Section::make('Magazine Layout Settings')
@@ -85,7 +101,7 @@ class PageSectionForm
                             ->default(true),
                     ])
                     // Only show this box if the user selected the Magazine component!
-                    ->visible(fn(Get $get) => $get('component') === 'sections.magazine-home'),
+                    ->visible(fn (Get $get) => $get('component') === 'sections.magazine-home'),
             ]);
     }
 }

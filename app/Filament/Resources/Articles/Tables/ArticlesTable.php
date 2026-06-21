@@ -12,7 +12,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
-use Illuminate\Support\Str ;
+use Illuminate\Support\Str;
+
 class ArticlesTable
 {
     public static function configure(Table $table): Table
@@ -42,10 +43,11 @@ class ArticlesTable
                     ->sortable(),
             ])
             ->filters([
-                SelectFilter ::make('category_id')
+                SelectFilter::make('category_id')
                     ->relationship('category', 'name')
-                    ->label('Category'),
-                    
+                    ->label('Category')
+                    ->preload(),
+
                 TernaryFilter::make('is_visible')
                     ->label('Visibility'),
             ])

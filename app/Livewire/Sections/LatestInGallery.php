@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Sections;
 
-use App\Models\PageSection;
 use App\Models\Article;
 use App\Models\Category;
-use Livewire\Component;
+use App\Models\PageSection;
 use Livewire\Attributes\Computed;
+use Livewire\Component;
 
 class LatestInGallery extends Component
 {
     public PageSection $section;
+
     public array $settings = [];
 
     public function mount(PageSection $section, array $settings = [])
@@ -22,7 +23,6 @@ class LatestInGallery extends Component
     #[Computed]
     public function category()
     {
-        // Resolves $this->category for the Blade view safely
         return Category::find($this->section->category_id);
     }
 
@@ -33,14 +33,20 @@ class LatestInGallery extends Component
         if ($this->section->category_id) {
             $articles = Article::with(['page', 'category', 'media'])
                 ->where('category_id', $this->section->category_id)
-                ->where('is_visible', true) // Added safety check for published items
+                ->where('is_visible', true)
                 ->latest('published_at')
-                ->take(8) // Keeps the ideal geometric octagon shape
+                ->take(8)
                 ->get();
         }
 
         return view('livewire.sections.latest-in-gallery', [
-            'articles' => $articles
+            'articles' => $articles,
+            'count' => 5,
+
+            // Safe fallback extractions for all responsive radii
+            'mobileRadius' => $this->settings['mobileRadius'] ?? 0,
+            'tabletRadius' => $this->settings['tabletRadius'] ?? 0,
+            'desktopRadius' => $this->settings['desktopRadius'] ?? 0,
         ]);
     }
 }

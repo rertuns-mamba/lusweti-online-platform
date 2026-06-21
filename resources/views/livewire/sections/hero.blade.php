@@ -9,9 +9,8 @@
 
                 {{-- HERO STORY (BBC/REUTERS STYLE SPLIT) --}}
                 @foreach($featuredLargeLeft as $article)
-                <a href="/ms/{{ $article->category->slug ?? 'news' }}/{{ $article->slug }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <a href="{{ route('article.show', [$article->category->slug ?? 'news', $article->slug]) }}"
+                    wire:navigate
                     wire:key="hero-{{ $article->id }}"
                     class="group block border-b border-slate-200 pb-6 transition-all duration-300">
 
@@ -67,9 +66,8 @@
                     {{-- TEXT STORIES --}}
                     <div class="divide-y divide-slate-200">
                         @foreach($textTeasers as $article)
-                        <a href="/ms/{{ $article->category->slug ?? 'news' }}/{{ $article->slug }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <a href="{{ route('article.show', [$article->category->slug ?? 'news', $article->slug]) }}"
+                            wire:navigate
                             wire:key="text-{{ $article->id }}"
                             class="group block py-4 first:pt-0 last:pb-0">
 
@@ -93,9 +91,8 @@
                     {{-- IMAGE THUMBNAILS --}}
                     <div class="divide-y divide-slate-200">
                         @foreach($rightThumbnails as $article)
-                        <a href="/ms/{{ $article->category->slug ?? 'news' }}/{{ $article->slug }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <a href="{{ route('article.show', [$article->category->slug ?? 'news', $article->slug]) }}"
+                            wire:navigate
                             wire:key="thumb-{{ $article->id }}"
                             class="group flex gap-4 py-4 first:pt-0 last:pb-0">
 
@@ -175,7 +172,7 @@
                         </div>
                         <div class="space-y-3">
                             @foreach($imageItems as $item)
-                            <a href="/ms/{{ $item->category->slug ?? 'news' }}/{{ $item->slug }}" target="_blank" rel="noopener noreferrer" wire:key="image-item-{{ $item->id }}" class="group flex gap-3 items-start border-b border-slate-100 pb-3 last:border-0 last:pb-0">
+                            <a href="{{ route('article.show', [$item->category->slug ?? 'news', $item->slug]) }}" wire:navigate wire:key="image-item-{{ $item->id }}" class="group flex gap-3 items-start border-b border-slate-100 pb-3 last:border-0 last:pb-0">
                                 <div class="h-14 w-20 flex-shrink-0 overflow-hidden bg-slate-100">
                                     <img src="{{ $item->featured_image_thumb_url ?? asset('images/placeholders/article-default.jpg') }}" alt="{{ $item->title }}" loading="lazy" class="h-full w-full object-cover">
                                 </div>
@@ -217,7 +214,7 @@
                         </div>
                         <div class="space-y-3">
                             @foreach($relatedArticles as $relatedArticle)
-                            <a href="/ms/{{ $relatedArticle->category->slug ?? 'news' }}/{{ $relatedArticle->slug }}" target="_blank" rel="noopener noreferrer" wire:key="related-{{ $relatedArticle->id }}" class="group block border-b border-slate-100 pb-2 last:border-0 last:pb-0">
+                            <a href="{{ route('article.show', [$relatedArticle->category->slug ?? 'news', $relatedArticle->slug]) }}" wire:navigate wire:key="related-{{ $relatedArticle->id }}" class="group block border-b border-slate-100 pb-2 last:border-0 last:pb-0">
                                 <p class="text-xs font-bold text-slate-900 line-clamp-2 group-hover:underline leading-snug">{{ $relatedArticle->title }}</p>
                                 <p class="mt-1 text-[10px] text-slate-400">{{ $relatedArticle->published_at?->diffForHumans() ?? now()->diffForHumans() }}</p>
                             </a>

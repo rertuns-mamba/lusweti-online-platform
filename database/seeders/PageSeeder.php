@@ -17,7 +17,7 @@ class PageSeeder extends Seeder
             'title' => 'Sports',
             'slug' => 'sports',
             'is_active' => true,
-            'sort_order' => 1,
+            'sort_order' => 3,
         ]);
 
         Page::create([
@@ -25,6 +25,19 @@ class PageSeeder extends Seeder
             'slug' => 'entertainment',
             'is_active' => true,
             'sort_order' => 2,
+        ]);
+        Page::create([
+            'title' => 'Home',
+            'slug' => 'home',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        Page::create([
+            'title' => 'News',
+            'slug' => 'news',
+            'is_active' => true,
+            'sort_order' => 4,
         ]);
     }
 }

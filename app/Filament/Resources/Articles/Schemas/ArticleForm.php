@@ -27,23 +27,44 @@ class ArticleForm
                         TextInput::make('title')
                             ->required()
                             ->maxLength(255)
+                            ->minLength(5)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (string $operation, $state, Set $set) => 
-                                $operation === 'create' ? $set('slug', Str::slug($state)) : null
-                            ),
+                            ->afterStateUpdated(fn (string $operation, $state, Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null
+                            )
+                            ->validationMessages([
+                                'required' => 'The article title is required.',
+                                'min' => 'The title must be at least 5 characters.',
+                                'max' => 'The title cannot exceed 255 characters.',
+                            ]),
 
                         TextInput::make('slug')
                             ->required()
                             ->maxLength(255)
-                            ->unique(ignoreRecord: true),
+                            ->unique(ignoreRecord: true)
+                            ->alphaDash()
+                            ->validationMessages([
+                                'required' => 'The slug is required.',
+                                'unique' => 'This slug is already in use.',
+                                'alpha_dash' => 'The slug may only contain letters, numbers, dashes, and underscores.',
+                            ]),
 
                         Textarea::make('summary')
                             ->rows(3)
                             ->maxLength(500)
-                            ->helperText('Used for the BBC-style grid descriptions.'),
+                            ->minLength(20)
+                            ->helperText('Used for the BBC-style grid descriptions. Min 20 characters.')
+                            ->validationMessages([
+                                'min' => 'The summary must be at least 20 characters.',
+                                'max' => 'The summary cannot exceed 500 characters.',
+                            ]),
 
                         RichEditor::make('content')
-                            ->required(),
+                            ->required()
+                            ->minLength(50)
+                            ->validationMessages([
+                                'required' => 'The article content is required.',
+                                'min' => 'The content must be at least 50 characters.',
+                            ]),
                     ]),
 
                     Section::make('Media')->schema([
@@ -52,7 +73,13 @@ class ArticleForm
                             ->image()
                             ->imageEditor()
                             ->responsiveImages()
-                            ->helperText('This image drives the Hero and Thumbnail layouts.'),
+                            ->maxSize(10240) // 10MB max
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif'])
+                            ->imageResizeTargetWidth(1200)
+                            ->imageResizeTargetHeight(675)
+                            ->imageResizeMode('cover')
+                            ->helperText('This image drives the Hero and Thumbnail layouts. Recommended: 1200x675px, max 10MB.')
+                            ->required(fn (string $operation): bool => $operation === 'create'),
                     ]),
                 ])->columnSpan(['lg' => 2]),
 
@@ -75,7 +102,7 @@ class ArticleForm
                             ->relationship('user', 'name')
                             ->default(Auth::id())
                             ->searchable(),
-                            
+
                         TextInput::make('topic_label')
                             ->label('Kicker / Topic Label')
                             ->placeholder('e.g. Analysis, Live, Breaking'),
@@ -89,16 +116,16 @@ class ArticleForm
                         Toggle::make('is_visible')
                             ->label('Visible to Public')
                             ->default(true),
-                            
+
                         Toggle::make('is_featured_in_row')
                             ->label('Featured in Row')
                             ->default(false),
-                            
+
                         Toggle::make('is_prime')
                             ->label('Prime Article')
                             ->default(false),
                     ]),
-                    
+
                     Section::make('Advanced Layouts')->schema([
                         Select::make('content_type')
                             ->options([
@@ -107,13 +134,13 @@ class ArticleForm
                                 'gallery' => 'Gallery Post',
                             ])
                             ->default('article'),
-                            
+
                         TextInput::make('external_url')
                             ->url()
                             ->helperText('Provide if this links out to an external source.'),
                     ])->collapsed(),
                 ])->columnSpan(['lg' => 1]),
             ])->columns(3);
-            
+
     }
 }

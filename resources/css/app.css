@@ -303,3 +303,60 @@ MAGAZINE HOME CSS
     display: none;
     /* Chrome, Safari and Opera */
 }
+
+
+/* 7. CRITICAL VIDEO ELEMENT INJECT SELECTORS STREAM-FEED CSS=========================================*/
+
+#localVideo video,
+#remoteVideos video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 15 !important;
+    background: #020617;
+    /* slate-950 */
+}
+
+
+/* Elegant custom scrollbar for the live chat container */
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* =========================
+        VIDEO FULLSCREEN MODE:
+        When a video enters fullscreen, we want to ensure it fills the entire screen without any black
+        ============================        
+        */
+
+#livekitPlayer:fullscreen,
+#livekitPlayer:-webkit-full-screen {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    background: black;
+}
+
+#livekitPlayer:fullscreen video,
+#livekitPlayer:-webkit-full-screen video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}

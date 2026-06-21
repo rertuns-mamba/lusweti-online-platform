@@ -37,7 +37,8 @@
                 preg_match('/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?\/]+)/', $video->video_url ?? '', $youtubeMatches);
                 $youtubeId = $youtubeMatches[1] ?? ($video->youtube_id ?? null);
             @endphp
-            {{-- Alpine.js Hover-to-Play Component --}}
+            
+            {{-- Alpine.js Hover-to-Play Component Configuration --}}
             <article
                 wire:key="video-teaser-{{ $video->id }}"
                 x-data="{
@@ -61,9 +62,11 @@
                 @focusin="playVideo"
                 @focusout="resetVideo"
                 class="group bg-white border border-neutral-200 rounded-none shadow-none text-neutral-900 flex flex-col relative">
-                <a href="/{{ $this->page?->slug ?? 'videos' }}/{{ $video->slug }}"
+                
+                {{-- INTERCEPT CLICK FOR MODAL PREVIEW --}}
+                <a href="{{ route('article.show', [$this->page?->slug ?? 'videos', $video->slug]) }}"
                     wire:navigate
-                    class="block h-full bg-transparent outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2">
+                    class="block h-full bg-transparent outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 cursor-pointer">
 
                     <div class="relative aspect-video w-full overflow-hidden bg-slate-900 rounded-none mb-3">
 
@@ -73,8 +76,7 @@
                             loading="lazy"
                             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 group-focus:scale-105">
                         @else
-
-                        {{-- Prefer the explicitly seeded local video collection for Video models --}}
+                        {{-- Local video preview rendering --}}
                         <video
                             x-ref="videoElement"
                             src="{{ $video->getFirstMediaUrl('local_video') ?: $video->video_url }}"
@@ -84,15 +86,6 @@
                             playsinline
                             class="w-full h-full object-cover">
                         </video>
-                        {{--<video
-                            x-ref="videoElement"
-                            src="{{ $video->video_url }}"
-                            preload="metadata"
-                            loop
-                            muted
-                            playsinline
-                            class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 group-focus:scale-105">
-                        </video>--}}
                         @endif
 
                         <div class="absolute bottom-0 left-0 bg-slate-900/90 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1.5 flex items-center gap-1.5 transition-opacity duration-300"
@@ -133,6 +126,7 @@
             </a>
         </div>
 
+        {{-- ADVERTISEMENT ACCENTS --}}
         <div class="mt-12 border-t border-b border-slate-200 py-3 text-center rounded-none bg-transparent">
             <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 block">ADVERTISEMENT</span>
         </div>

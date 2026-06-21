@@ -37,15 +37,15 @@
             @foreach($this->collectionItems as $gallery)
             <article wire:key="gallery-teaser-{{ $gallery->id }}" class="group bg-white border border-neutral-200 rounded-none shadow-none text-neutral-900 flex flex-col">
                 
-                {{-- Hit Area Link: Directs the user to the single gallery/image view page --}}
-                <a href="/{{ $this->page?->slug ?? 'galleries' }}/{{ $gallery->slug }}"
+                {{-- INTERCEPT CLICK FOR MODAL PREVIEW --}}
+                <a href="{{ route('article.show', [$this->page?->slug ?? 'galleries', $gallery->slug]) }}"
                     wire:navigate
-                    class="block h-full bg-transparent outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2">
+                    class="block h-full bg-transparent outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 cursor-pointer">
 
                     {{-- Image Frame --}}
                     <div class="relative aspect-video w-full overflow-hidden bg-slate-900 rounded-none mb-3">
                         
-                        {{-- Prefer the article's real image fields first, then the featured media collection, then a safe placeholder --}}
+                        {{-- Fallback Image Chain Hierarchy --}}
                         <img src="{{
                             $gallery->featured_image_thumb_url
                                 ?: $gallery->getFirstMediaUrl('featured_image', 'thumb')

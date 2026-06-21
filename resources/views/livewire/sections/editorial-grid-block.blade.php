@@ -20,7 +20,7 @@
 
             {{-- COLUMN 1: FEATURED STORY TEXT INTERACTION --}}
             <section class="border-b border-slate-200 pb-6 lg:border-b-0 lg:pb-0">
-                <a href="/ms/{{ $this->category->slug }}/{{ $this->featuredItem->slug }}"
+                <a href="{{ route('article.show', [$this->category->slug, $this->featuredItem->slug]) }}"
                     wire:navigate
                     class="group block h-full">
                     
@@ -44,7 +44,7 @@
 
             {{-- COLUMN 2: FEATURED STORY WIDESCREEN MEDIA FRAME --}}
             <section class="border-b border-slate-200 pb-6 lg:border-b-0 lg:pb-0">
-                <a href="/ms/{{ $this->category->slug }}/{{ $this->featuredItem->slug }}"
+                <a href="{{ route('article.show', [$this->category->slug, $this->featuredItem->slug]) }}"
                     wire:navigate
                     class="group block">
                     
@@ -68,7 +68,7 @@
                     <ol class="divide-y divide-slate-100">
                         @foreach($this->standardItems as $item)
                         <li class="py-3.5 first:pt-0 last:pb-0">
-                            <a href="/ms/{{ $this->category->slug }}/{{ $item->slug }}"
+                            <a href="{{ route('article.show', [$this->category->slug, $item->slug]) }}"
                                 wire:navigate
                                 class="group block space-y-1.5">
 

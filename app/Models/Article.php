@@ -2,18 +2,17 @@
 
 namespace App\Models;
 
+use App\Concerns\Searchable;
 use App\Events\ArticlePublished;
 use App\Jobs\ScrapeExternalArticleCover;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Concerns\Searchable;
-
 
 class Article extends Model implements HasMedia
 {
@@ -44,7 +43,7 @@ class Article extends Model implements HasMedia
         'is_active', // Added
         'external_url', // Added
         'featured_image_thumb_url', // Added
-        'content_type' // <-- Added this to bridge the architectures perfectly
+        'content_type', // <-- Added this to bridge the architectures perfectly
     ];
 
     // Always cast your booleans and dates!
@@ -52,30 +51,42 @@ class Article extends Model implements HasMedia
     {
         return [
             'is_featured_in_row' => 'boolean',
-            'is_prime'           => 'boolean',
-            'is_visible'         => 'boolean',
-            'published_at'       => 'datetime',
+            'is_prime' => 'boolean',
+            'is_visible' => 'boolean',
+            'published_at' => 'datetime',
         ];
     }
-
-
 
     // --- Events ---
 
     protected static function booted(): void
     {
         static::saved(function (Article $article) {
-            if (!app()->runningInConsole()) {
-                broadcast(new ArticlePublished($article))->toOthers();
-            }
-            if ($article->external_url && $article->wasChanged('external_url') && !app()->runningInConsole()) {
-                ScrapeExternalArticleCover::dispatchAfterResponse($article->id);
+            try {
+                if (! app()->runningInConsole()) {
+                    broadcast(new ArticlePublished($article))->toOthers();
+                }
+                if ($article->external_url && $article->wasChanged('external_url') && ! app()->runningInConsole()) {
+                    ScrapeExternalArticleCover::dispatchAfterResponse($article->id);
+                }
+            } catch (\Exception $e) {
+                logger()->error('Failed to broadcast article update', [
+                    'article_id' => $article->id,
+                    'error' => $e->getMessage(),
+                ]);
             }
         });
 
         static::deleted(function (Article $article) {
-            if (!app()->runningInConsole()) {
-                broadcast(new ArticlePublished($article))->toOthers();
+            try {
+                if (! app()->runningInConsole()) {
+                    broadcast(new ArticlePublished($article))->toOthers();
+                }
+            } catch (\Exception $e) {
+                logger()->error('Failed to broadcast article deletion', [
+                    'article_id' => $article->id,
+                    'error' => $e->getMessage(),
+                ]);
             }
         });
     }
@@ -118,7 +129,7 @@ class Article extends Model implements HasMedia
 
     public function scopePublishedFeed(Builder $query, ?int $categoryId = null): Builder
     {
-        // If a categoryId is provided, filter by it. 
+        // If a categoryId is provided, filter by it.
         // If null, we proceed without filtering (or return nothing if you prefer)
         return $query->when($categoryId, function ($q) use ($categoryId) {
             $q->where('category_id', $categoryId);
@@ -129,14 +140,13 @@ class Article extends Model implements HasMedia
 
     // --- Media Accessors ---
 
-
-    // This dynamically provides a thumbnail URL for the Blade view, 
+    // This dynamically provides a thumbnail URL for the Blade view,
     // seamlessly mixing external RSS images with local Spatie uploads.
     protected function featuredImageThumbUrl(): Attribute
     {
         return Attribute::make(
             get: function ($value) {
-                if (!empty($value)) {
+                if (! empty($value)) {
                     return $value; // Return external URL from NewsAPI
                 }
 
@@ -151,7 +161,8 @@ class Article extends Model implements HasMedia
         if ($this->hasMedia('featured_image')) {
             // Try to get the hero conversion. If empty, fallback to the original image.
             $url = $this->getFirstMediaUrl('featured_image', 'hero');
-            return !empty($url) ? $url : $this->getFirstMediaUrl('featured_image');
+
+            return ! empty($url) ? $url : $this->getFirstMediaUrl('featured_image');
         }
 
         return $this->image_path;
@@ -162,7 +173,8 @@ class Article extends Model implements HasMedia
         if ($this->hasMedia('featured_image')) {
             // Try to get the thumb conversion. If empty, fallback to the original image.
             $url = $this->getFirstMediaUrl('featured_image', 'thumb');
-            return !empty($url) ? $url : $this->getFirstMediaUrl('featured_image');
+
+            return ! empty($url) ? $url : $this->getFirstMediaUrl('featured_image');
         }
 
         return $this->image_path;

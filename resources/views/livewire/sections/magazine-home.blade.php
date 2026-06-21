@@ -71,7 +71,7 @@
 
         $targetUrl = $isVideo
             ? ($videoUrl ?: '#')
-            : $item->external_url;
+            : route('article.show', [$item->category->slug ?? 'news', $item->slug]);
 
         $posterUrl = $isVideo
             ? ($item->is_youtube && $youtubeId
@@ -115,7 +115,7 @@
 
             {{-- Media Container --}}
             <a href="{{ $targetUrl }}"
-                @if(!$isVideo) target="_blank" rel="noopener noreferrer" @endif
+                @if(!$isVideo) wire:navigate @endif
                 class="relative block w-full aspect-video overflow-hidden bg-gray-100 select-none"
                 x-ref="container"
                 draggable="false">
@@ -166,7 +166,7 @@
                 </span>
 
                 <h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight line-clamp-2">
-                    <a href="{{ $targetUrl }}" class="hover:text-blue-600 transition-colors" @if(!$isVideo) target="_blank" rel="noopener noreferrer" @endif draggable="false">
+                    <a href="{{ $targetUrl }}" class="hover:text-blue-600 transition-colors" @if(!$isVideo) wire:navigate @endif draggable="false">
                         {{ $item->title }}
                     </a>
                 </h3>

@@ -4,16 +4,16 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class StreamChatMessageSent implements ShouldBroadcastNow
+class StreamChatMessageSent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public array $message;
+
     public string $room;
 
     public function __construct(array $message, string $room)
@@ -25,7 +25,7 @@ class StreamChatMessageSent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('stream-chat.' . $this->room),
+            new Channel('stream-chat.'.$this->room),
         ];
     }
 

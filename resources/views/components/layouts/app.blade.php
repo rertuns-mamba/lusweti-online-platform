@@ -18,6 +18,7 @@
 
 <body class="antialiased">
 
+    <livewire:global.page-header />
     <x-frontend.navbar />
 
 

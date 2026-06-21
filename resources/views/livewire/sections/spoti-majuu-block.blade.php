@@ -28,7 +28,7 @@
 
             <div class="lg:col-span-5 border-b border-gray-200 pb-6 lg:border-b-0 lg:pb-0">
                 @php $featuredItem = $this->columnLayouts['featured']; @endphp
-                <a href="/ms/{{ $this->category->slug }}/{{ $featuredItem->slug }}" wire:navigate class="block group">
+                <a href="{{ route('article.show', [$this->category->slug, $featuredItem->slug]) }}" wire:navigate class="block group">
                     @if($featuredItem->featured_image_url)
                         <div class="aspect-[16/10] bg-gray-100 overflow-hidden relative">
                             <img src="{{ $featuredItem->featured_image_url }}" alt="{{ $featuredItem->title }}" class="w-full h-full object-cover rounded-none transition-transform duration-300 group-hover:scale-102">
@@ -57,7 +57,7 @@
 
             <div class="lg:col-span-4 space-y-4 border-b border-gray-200 pb-6 lg:border-b-0 lg:pb-0 md:border-r md:border-gray-100 md:pr-4">
                 @foreach($this->columnLayouts['thumbnails'] as $thumbItem)
-                    <a href="/ms/{{ $this->category->slug }}/{{ $thumbItem->slug }}" wire:navigate class="flex gap-4 pb-4 border-b border-gray-100 last:border-0 last:pb-0 group">
+                    <a href="{{ route('article.show', [$this->category->slug, $thumbItem->slug]) }}" wire:navigate class="flex gap-4 pb-4 border-b border-gray-100 last:border-0 last:pb-0 group">
                         <div class="flex-1 min-w-0">
                             <h3 class="text-sm font-bold text-gray-900 group-hover:text-red-600 transition-colors leading-snug">
                                 @if($thumbItem->is_prime)
@@ -82,7 +82,7 @@
 
             <div class="lg:col-span-3 space-y-4">
                 @foreach($this->columnLayouts['textOnly'] as $textItem)
-                    <a href="/ms/{{ $this->category->slug }}/{{ $textItem->slug }}" wire:navigate class="block pb-4 border-b border-gray-100 last:border-0 last:pb-0 group">
+                    <a href="{{ route('article.show', [$this->category->slug, $textItem->slug]) }}" wire:navigate class="block pb-4 border-b border-gray-100 last:border-0 last:pb-0 group">
                         <h3 class="text-sm font-bold text-gray-900 group-hover:text-red-600 transition-colors leading-snug">
                             @if($textItem->is_prime)
                                 <span class="inline-block text-[9px] font-black tracking-wider px-1 py-0.5 bg-red-600 text-white rounded-none align-middle mr-1">PRIME</span>

@@ -3,9 +3,9 @@
 namespace App\Filament\Resources\Pages\Schemas;
 
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
@@ -19,16 +19,27 @@ class PageForm
                 TextInput::make('title')
                     ->required()
                     ->maxLength(255)
+                    ->minLength(3)
                     ->live(onBlur: true)
                     ->afterStateUpdated(
-                        fn(?string $state, callable $set) =>
-                        $set('slug', Str::slug($state))
-                    ),
+                        fn (?string $state, callable $set) => $set('slug', Str::slug($state))
+                    )
+                    ->validationMessages([
+                        'required' => 'The page title is required.',
+                        'min' => 'The title must be at least 3 characters.',
+                        'max' => 'The title cannot exceed 255 characters.',
+                    ]),
 
                 TextInput::make('slug')
                     ->required()
                     ->unique(ignoreRecord: true)
-                    ->helperText('Frontend URL slug.'),
+                    ->alphaDash()
+                    ->helperText('Frontend URL slug.')
+                    ->validationMessages([
+                        'required' => 'The slug is required.',
+                        'unique' => 'This slug is already in use.',
+                        'alpha_dash' => 'The slug may only contain letters, numbers, dashes, and underscores.',
+                    ]),
 
                 ColorPicker::make('bg_color')
                     ->label('Background Color')

@@ -19,7 +19,7 @@ class HeroContentSeeder extends Seeder
         $categoryMap = $this->seedCategories();
         $homePage = Page::updateOrCreate(
             ['slug' => 'home'],
-            ['title' => 'Home Page', 'is_active' => true]
+            ['title' => 'News', 'is_active' => true]
         );
 
         $this->seedHomeSections($homePage, $categoryMap);

@@ -25,6 +25,7 @@ class ArticlePublished implements ShouldBroadcastNow
     {
         return [
             new Channel('magazine-stream'),
+            new Channel('articles.'.$this->article->id),
         ];
     }
 
@@ -34,5 +35,30 @@ class ArticlePublished implements ShouldBroadcastNow
     public function broadcastAs(): string
     {
         return 'article.mutated';
+    }
+
+    /**
+     * Specify the broadcast connection for Reverb.
+     */
+    public function broadcastConnection(): string
+    {
+        return 'reverb';
+    }
+
+    /**
+     * Include article data in broadcast payload.
+     */
+    public function broadcastWith(): array
+    {
+        return [
+            'id' => $this->article->id,
+            'title' => $this->article->title,
+            'slug' => $this->article->slug,
+            'is_visible' => $this->article->is_visible,
+            'published_at' => $this->article->published_at?->toISOString(),
+            'featured_image_url' => $this->article->featured_image_url,
+            'category_id' => $this->article->category_id,
+            'action' => $this->article->wasRecentlyCreated ? 'created' : 'updated',
+        ];
     }
 }
