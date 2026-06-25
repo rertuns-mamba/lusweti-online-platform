@@ -14,6 +14,23 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
 
+
+            // $table->index('category_id');
+            // $table->index('page_id');
+            // $table->index('user_id');
+
+            // $table->index('published_at');
+
+            // $table->index([
+            //     'is_active',
+            //     'is_visible'
+            // ]);
+
+            // $table->index([
+            //     'category_id',
+            //     'published_at'
+            // ]);
+
             // 1. Structural Relationships (Foreign Keys)
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();

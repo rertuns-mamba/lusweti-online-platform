@@ -1,4 +1,4 @@
-<div class="min-h-[calc(100vh-120px)] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-neutral-950 text-white selection:bg-red-600 selection:text-white">
+<div class="min-h-[calc(100vh-120px)] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-neutral text-white selection:bg-red-600 selection:text-white">
     
     <div class="w-full max-w-md text-center">
         <div class="inline-block bg-neutral-800 text-neutral-300 px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase mb-4 shadow-sm border border-neutral-700">SYSTEM RECOVERY</div>

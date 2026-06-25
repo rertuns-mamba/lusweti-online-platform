@@ -31,9 +31,11 @@ class DatabaseSeeder extends Seeder
             BreakingNewsSeeder::class,
             VideoGridSeeder::class,
             GlobalPageFooterSeeder::class,
-            HeroContentSeeder::class,            
-            SpotiKenyaSeeder::class,
+            // HeroContentSeeder::class,            
+            // SpotiKenyaSeeder::class,
             SidebarWidgetSeeder::class,
+            GalleryGridSeeder::class,
+            PortalsSeeder::class,
         ]);
     }
 }

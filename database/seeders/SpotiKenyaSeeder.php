@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 
 class SpotiKenyaSeeder extends Seeder
 {
+    public $withinTransaction = false;
+
     public function run(): void
     {
         // 1. Core Page Structure

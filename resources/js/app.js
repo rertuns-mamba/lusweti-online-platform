@@ -1,3 +1,11 @@
+// 
+
+
+
+
+
+
+
 /**
  * 1. IMPORTS & DEPENDENCIES
  */
@@ -132,12 +140,20 @@ document.addEventListener('alpine:init', () => {
                         }
                         this.reconnecting = false;
                     }
+
                     if (state === ConnectionState.Reconnecting) {
                         this.reconnecting = true;
                     }
+
                     if (state === ConnectionState.Disconnected) {
+                        this.isLive = false;
                         this.isConnecting = false;
+                        console.warn('LiveKit room disconnected. Verify your token, room name, and LiveKit server URL.');
                     }
+                });
+
+                this.room.on(RoomEvent.ConnectionError, (error) => {
+                    console.error('LiveKit connection error:', error);
                 });
 
                 this.room.on(RoomEvent.TrackSubscribed, (track) => {
@@ -211,7 +227,33 @@ document.addEventListener('alpine:init', () => {
                 this.attachLocalPreview();
 
                 if (this.room.state !== this.ConnectionState.Connected) {
-                    await this.room.connect(this.url, this.token);
+                    if (this.room.state === this.ConnectionState.Connecting) {
+                        console.log('LiveKit is still connecting; waiting for connection before publishing.');
+                        await new Promise((resolve, reject) => {
+                            const onStateChange = (nextState) => {
+                                if (nextState === this.ConnectionState.Connected) {
+                                    clearTimeout(timeout);
+                                    this.room.off(RoomEvent.ConnectionStateChanged, onStateChange);
+                                    resolve();
+                                }
+
+                                if (nextState === this.ConnectionState.Disconnected) {
+                                    clearTimeout(timeout);
+                                    this.room.off(RoomEvent.ConnectionStateChanged, onStateChange);
+                                    reject(new Error('LiveKit disconnected before publish'));
+                                }
+                            };
+
+                            const timeout = setTimeout(() => {
+                                this.room.off(RoomEvent.ConnectionStateChanged, onStateChange);
+                                reject(new Error('LiveKit connect timed out before publish'));
+                            }, 15000);
+
+                            this.room.on(RoomEvent.ConnectionStateChanged, onStateChange);
+                        });
+                    } else {
+                        await this.room.connect(this.url, this.token);
+                    }
                 }
 
                 await this.room.localParticipant.publishTrack(this.videoTrack);
@@ -327,20 +369,6 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        // attachLocalPreview() {
-        //     const container = document.getElementById('localVideo');
-        //     if (!container || !this.videoTrack) return;
-
-        //     container.innerHTML = '';
-
-        //     const el = this.videoTrack.attach();
-        //     el.className = 'w-full h-full object-contain bg-black';
-        //     el.autoplay = true;
-        //     el.playsInline = true;
-        //     el.muted = true;
-        //     container.appendChild(el);
-        // },
-
 
         attachLocalPreview() {
 
@@ -369,6 +397,7 @@ document.addEventListener('alpine:init', () => {
             const container = document.getElementById('localVideo');
             if (container) container.innerHTML = '';
         },
+
 
 
         attachRemoteTrack(track) {
@@ -670,6 +699,7 @@ document.addEventListener('alpine:init', () => {
                 this.recordingStatus = 'Saved';
             }
         },
+
 
 
         forceDownload() {
@@ -979,23 +1009,6 @@ document.addEventListener('track-ga-event', (event) => {
         window.trackEvent(event.detail.name, event.detail.params);
     }
 });
-
-
-// const room = new LiveKit.Room({
-//     adaptiveStream: true, // Stops sending video to tabs in the background
-//     dynacast: true, // Dynamically pauses sender tracks if no one is watching
-//     videoCaptureDefaults: {
-//         resolution: LiveKit.VideoPresets.h540, // Cap uploads to 540p or 720p
-//     },
-//     publishDefaults: {
-//         simulcast: true, // Forces sender to upload multiple qualities
-//         videoSimulcastLayers: [
-//             LiveKit.VideoPresets.h180,
-//             LiveKit.VideoPresets.h360,
-//             LiveKit.VideoPresets.h540,
-//         ],
-//     }
-// });
 
 /**
  * 6. INITIALIZATION

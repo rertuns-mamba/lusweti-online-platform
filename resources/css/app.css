@@ -6,6 +6,7 @@
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 @custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --color-zinc-50: #fafafa;
@@ -33,11 +34,12 @@
 }
 
 @layer base {
+
     *,
-     ::after,
-     ::before,
-     ::backdrop,
-     ::file-selector-button {
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
 }
@@ -47,7 +49,7 @@
 }
 
 [data-flux-label] {
-    @apply !mb-0 !leading-tight;
+    @apply  !mb-0 !leading-tight;
 }
 
 input:focus[data-flux-control],
@@ -73,11 +75,6 @@ select:focus[data-flux-control] {
 }
 
 
-/* 
-===========
-BBC CSS 
-===========    
-*/
 
 
 /* =======================================
@@ -88,6 +85,7 @@ BBC CSS
     0% {
         transform: translate3d(0, 0, 0);
     }
+
     100% {
         transform: translate3d(-50%, 0, 0);
         /* Moves exactly half the duplicated content */
@@ -119,15 +117,12 @@ LOGIN CSS
     display: none !important;
 }
 
-
 /* 
 
 =======================
 ROTATING GALLERY CSS 
 ======================
 */
-
-
 /* BBC Typography Fallback (Helvetica/Arial is closest web-safe to Reith Sans) 
 */
 
@@ -184,7 +179,7 @@ ROTATING GALLERY CSS
     position: absolute;
     inset: 0;
     /* Harsher gradient for maximum text contrast, typical of news sites */
-    background: linear-gradient( to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0) 100%);
 }
 
 .news-content {
@@ -240,6 +235,7 @@ ROTATING GALLERY CSS
     from {
         transform: rotateY(0deg);
     }
+
     to {
         transform: rotateY(360deg);
     }
@@ -252,13 +248,16 @@ ROTATING GALLERY CSS
     .news-stage {
         height: 380px;
     }
+
     .news-spinner {
         width: 200px;
         height: 260px;
     }
+
     .news-card {
         transform: rotateY(calc((var(--i) - 1) * (360deg / var(--total)))) translateZ(var(--tablet-radius));
     }
+
     .news-content h3 {
         font-size: 18px;
     }
@@ -271,13 +270,16 @@ ROTATING GALLERY CSS
     .news-stage {
         height: 460px;
     }
+
     .news-spinner {
         width: 240px;
         height: 310px;
     }
+
     .news-card {
         transform: rotateY(calc((var(--i) - 1) * (360deg / var(--total)))) translateZ(var(--desktop-radius));
     }
+
     .news-content h3 {
         font-size: 20px;
     }
@@ -340,11 +342,12 @@ MAGAZINE HOME CSS
 }
 
 
-/* =========================
-        VIDEO FULLSCREEN MODE:
-        When a video enters fullscreen, we want to ensure it fills the entire screen without any black
-        ============================        
-        */
+/* 
+    =========================
+    VIDEO FULLSCREEN MODE:
+    When a video enters fullscreen, we want to ensure it fills the entire screen without any black
+    ============================        
+*/
 
 #livekitPlayer:fullscreen,
 #livekitPlayer:-webkit-full-screen {

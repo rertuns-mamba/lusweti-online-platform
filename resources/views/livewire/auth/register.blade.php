@@ -1,4 +1,4 @@
-<div class="min-h-[calc(100vh-120px)] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-neutral-950 text-white selection:bg-red-600 selection:text-white"
+<div class="min-h-[calc(100vh-120px)] flex flex-col justify-center py-12 sm:px-6 lg:px-8  text-white selection:bg-red-600 selection:text-white"
      x-data="{ ... }"> <div class="sm:mx-auto w-full max-w-md text-center px-4">
         <div class="inline-block bg-red-600 text-white px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase mb-4 shadow-sm">LUSWETI ID</div>
         <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Create an Engineer Profile</h2>

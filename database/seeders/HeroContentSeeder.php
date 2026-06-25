@@ -14,6 +14,8 @@ class HeroContentSeeder extends Seeder
 {
     use UsesPublicStorageMedia;
 
+    public $withinTransaction = false;
+
     public function run(): void
     {
         $categoryMap = $this->seedCategories();
@@ -32,7 +34,7 @@ class HeroContentSeeder extends Seeder
     protected function seedCategories(): array
     {
         $categoriesData = [
-            'sports' => 'Sports',
+            // 'sports' => 'Sports',
             'business' => 'Business & Technology',
             'spoti-majuu' => 'International Sports',
             'videos' => 'Videos',
@@ -92,6 +94,7 @@ class HeroContentSeeder extends Seeder
                 'is_active' => true,
                 'is_visible' => true,
             ],
+            
             [
                 'title' => 'Video Highlights',
                 'category_id' => $categoryMap['videos'],

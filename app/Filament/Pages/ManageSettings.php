@@ -3,36 +3,34 @@
 namespace App\Filament\Pages;
 
 use App\Models\SiteSetting;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Section; // Fixed namespace
-use Filament\Pages\Page;
-use Filament\Forms\Contracts\HasForms; // Required for forms on custom pages
-use Filament\Forms\Concerns\InteractsWithForms; // Required for forms on custom pages
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Notifications\Notification;
+use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 
-class ManageSettings extends Page implements HasForms
+class ManageSettings extends Page
 {
-    use InteractsWithForms; // Injects the form logic
+    use InteractsWithForms;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cog-6-tooth';
-    protected static ?string $navigationLabel = 'Site Settings';
-    
-    // Kept as static to comply with Filament v3 base Page architecture
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
+
+    protected static ?string $navigationLabel = 'Manage Settings';
+    protected static string | \UnitEnum | null $navigationGroup = 'Settings';
     protected string $view = 'filament.pages.manage-settings';
 
     public ?array $data = [];
 
     public function mount(): void
     {
-        // Fill the form using the 'data' array defined by statePath()
         $this->form->fill(SiteSetting::current()->toArray());
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Section::make('Global Branding')
                     ->schema([
@@ -42,13 +40,13 @@ class ManageSettings extends Page implements HasForms
                             ->required(),
                     ]),
             ])
-            ->statePath('data'); // Binds the form state to the public $data array
+            ->statePath('data');
     }
 
     public function save(): void
     {
         SiteSetting::current()->update($this->form->getState());
-        
+
         Notification::make()
             ->success()
             ->title('Settings saved')

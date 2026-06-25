@@ -1,10 +1,10 @@
 <div>
     @if($this->category && $this->columnLayouts['featured'])
-    <section class="w-full py-8 bg-white font-sans">
+    <section class="w-full py-4 bg-white font-sans">
         
         <a name="{{ $this->category->slug }}"></a>
 
-        <div class="mx-auto mt-8">
+        <div class="mx-auto mt-4">
             <div class="flex items-end justify-between border-b-2 border-gray-900 pb-2">
                 <a href="/ms/{{ $this->category->slug }}"
                    wire:navigate
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="mx-auto mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+        <div class="mx-auto mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
 
             <div class="lg:col-span-5 border-b border-gray-200 pb-6 lg:border-b-0 lg:pb-0">
                 @php $featuredItem = $this->columnLayouts['featured']; @endphp

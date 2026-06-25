@@ -8,6 +8,8 @@ use Illuminate\Support\Carbon;
 
 class BreakingNewsSeeder extends Seeder
 {
+    public $withinTransaction = false;
+
     public function run(): void
     {
         $newsItems = [

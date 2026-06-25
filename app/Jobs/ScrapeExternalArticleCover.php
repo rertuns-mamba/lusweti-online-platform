@@ -2,71 +2,83 @@
 
 namespace App\Jobs;
 
-use App\Models\Article;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Spatie\MediaLibrary\HasMedia;
 
 class ScrapeExternalArticleCover implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $articleId;
+    public string $modelClass;
+
+    public int $recordId;
 
     public int $tries = 2;
 
     public int $timeout = 30;
 
-    public function __construct(int $articleId)
+    public function __construct(string $modelClass, int $recordId)
     {
-        $this->articleId = $articleId;
+        $this->modelClass = $modelClass;
+        $this->recordId = $recordId;
     }
 
     public function handle(): void
     {
-        $article = Article::find($this->articleId);
+        if (! class_exists($this->modelClass)) {
+            Log::warning('ScrapeExternalArticleCover model class does not exist: '.$this->modelClass);
 
-        if (!$article || !filled($article->external_url)) {
+            return;
+        }
+
+        $model = $this->modelClass::find($this->recordId);
+
+        if (! $model instanceof HasMedia || ! filled($model->external_url)) {
             return;
         }
 
         try {
-            $imageUrl = $this->extractOgImage($article->external_url);
+            $imageUrl = $this->extractOgImage($model->external_url);
 
-            if (!$imageUrl) {
-                Log::info('No OG image found for external URL: ' . $article->external_url);
+            if (! $imageUrl) {
+                Log::info('No OG image found for external URL: '.$model->external_url);
+
                 return;
             }
 
-            $resolvedUrl = $this->resolveImageUrl($imageUrl, $article->external_url);
+            $resolvedUrl = $this->resolveImageUrl($imageUrl, $model->external_url);
 
-            if (!filter_var($resolvedUrl, FILTER_VALIDATE_URL)) {
-                Log::warning('Resolved OG image URL is invalid: ' . $resolvedUrl);
+            if (! filter_var($resolvedUrl, FILTER_VALIDATE_URL)) {
+                Log::warning('Resolved OG image URL is invalid: '.$resolvedUrl);
+
                 return;
             }
 
             $response = Http::timeout(30)->get($resolvedUrl);
 
-            if (!$response->successful()) {
-                Log::warning('Failed to download OG image for external URL: ' . $resolvedUrl . ' (status: ' . $response->status() . ')');
+            if (! $response->successful()) {
+                Log::warning('Failed to download OG image for external URL: '.$resolvedUrl.' (status: '.$response->status().')');
+
                 return;
             }
 
-            if ($article->hasMedia('featured_image')) {
-                $article->clearMediaCollection('featured_image');
+            if ($model->hasMedia('featured_image')) {
+                $model->clearMediaCollection('featured_image');
             }
 
-            $article->addMediaFromUrl($resolvedUrl)
+            $model->addMediaFromUrl($resolvedUrl)
                 ->preservingOriginal()
                 ->toMediaCollection('featured_image');
 
-            Log::info('Attached scraped OG image for external URL: ' . $article->external_url);
+            Log::info('Attached scraped OG image for external URL: '.$model->external_url);
         } catch (\Exception $e) {
-            Log::error('ScrapeExternalArticleCover failed for article ' . $this->articleId . ': ' . $e->getMessage());
+            Log::error('ScrapeExternalArticleCover failed for record '.$this->recordId.' ('.$this->modelClass.'): '.$e->getMessage());
         }
     }
 
@@ -75,25 +87,33 @@ class ScrapeExternalArticleCover implements ShouldQueue
         try {
             $response = Http::timeout(15)->get($url);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 return null;
             }
 
-            $html = $response->body();
-
-            if (preg_match('/<meta\s+property=["\']og:image["\']\s+content=["\']([^"\']+)["\']/i', $html, $matches)) {
-                return trim($matches[1]);
-            }
-
-            if (preg_match('/<meta\s+name=["\']twitter:image["\']\s+content=["\']([^"\']+)["\']/i', $html, $matches)) {
-                return trim($matches[1]);
-            }
-
-            return null;
+            return $this->extractOgImageFromHtml($response->body());
         } catch (\Exception $e) {
-            Log::warning('Failed to extract OG image from ' . $url . ': ' . $e->getMessage());
+            Log::warning('Failed to extract OG image from '.$url.': '.$e->getMessage());
+
             return null;
         }
+    }
+
+    private function extractOgImageFromHtml(string $html): ?string
+    {
+        $patterns = [
+            '/<meta[^>]+(?:property|name)\s*=\s*["\'](?:og:image|og:image:url|og:image:secure_url|twitter:image|twitter:image:src)["\'][^>]+content\s*=\s*["\']([^"\']+)["\'][^>]*>/i',
+            '/<meta[^>]+content\s*=\s*["\']([^"\']+)["\'][^>]+(?:property|name)\s*=\s*["\'](?:og:image|og:image:url|og:image:secure_url|twitter:image|twitter:image:src)["\'][^>]*>/i',
+            '/<link[^>]+rel\s*=\s*["\']image_src["\'][^>]+href\s*=\s*["\']([^"\']+)["\'][^>]*>/i',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $html, $matches)) {
+                return trim($matches[1]);
+            }
+        }
+
+        return null;
     }
 
     private function resolveImageUrl(string $imageUrl, string $baseUrl): string
@@ -102,15 +122,30 @@ class ScrapeExternalArticleCover implements ShouldQueue
 
         if (str_starts_with($imageUrl, '//')) {
             $scheme = parse_url($baseUrl, PHP_URL_SCHEME) ?: 'https';
-            return $scheme . ':' . $imageUrl;
+
+            return $scheme.':'.$imageUrl;
         }
 
         if (parse_url($imageUrl, PHP_URL_SCHEME) !== null) {
             return $imageUrl;
         }
 
-        $basePath = rtrim($baseUrl, '/');
+        $parsedBase = parse_url($baseUrl);
+        $scheme = $parsedBase['scheme'] ?? 'https';
+        $host = $parsedBase['host'] ?? '';
+        $port = isset($parsedBase['port']) ? ':'.$parsedBase['port'] : '';
+        $basePath = $parsedBase['path'] ?? '/';
 
-        return $basePath . '/' . ltrim($imageUrl, '/');
+        if (str_starts_with($imageUrl, '/')) {
+            return $scheme.'://'.$host.$port.$imageUrl;
+        }
+
+        $directory = rtrim(str_replace('\\', '/', dirname($basePath)), '/');
+
+        if ($directory === '.' || $directory === '') {
+            $directory = '';
+        }
+
+        return $scheme.'://'.$host.$port.$directory.'/'.ltrim($imageUrl, '/');
     }
 }

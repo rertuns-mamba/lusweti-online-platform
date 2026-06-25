@@ -10,32 +10,31 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
+        // 1. Flattened array: sort_order is now determined automatically by the index
         $categories = [
-            ['name' => 'News', 'sort_order' => 1],
-            ['name' => 'Sports', 'sort_order' => 2],
-            ['name' => 'Business', 'sort_order' => 3],
-            ['name' => 'Entertainment', 'sort_order' => 4],
-            ['name' => 'Videos', 'sort_order' => 5],
-            ['name' => 'Gallery', 'sort_order' => 6],
-            ['name' => 'Hadithi', 'sort_order' => 7],
-            ['name' => 'Hero', 'sort_order' => 8],
-            ['name' => 'Spoti Majuu', 'sort_order' => 9],
-            ['name' => 'Spoti Kenya', 'sort_order' => 10],
-            ['name' => 'Burudani', 'sort_order' => 11],
-            ['name' => 'Magazine', 'sort_order' => 12],
-            ['name' => 'Footer', 'sort_order' => 13],
-            ['name' => 'Latest In Gallery', 'sort_order' => 14],
-            
+            'Sports News', // Note: Fixed the 'Geral' typo
+            'Business',
+            'Videos',
+            'Gallery',
+            'Hadithi',
+            'Hero',
+            'Spoti Majuu',
+            'Spoti Kenya',
+            'Burudani',
+            'Most Featured',
+            'Footer',
+            'Latest In Gallery',
         ];
 
-        foreach ($categories as $category) {
-            Category::firstOrCreate(
-                ['name' => $category['name']],
+        foreach ($categories as $index => $name) {
+            // 2. Used updateOrCreate and matched by slug
+            Category::updateOrCreate(
+                ['slug' => Str::slug($name)], 
                 [
-                    'slug' => Str::slug($category['name']),
-                    'sort_order' => $category['sort_order'],
+                    'name' => $name,
+                    'sort_order' => $index + 1, // Maps index 0 to sort_order 1, etc.
                     'is_active' => true,
-                    'description' => "Global coverage of {$category['name']} updates.",
+                    'description' => "Global coverage of {$name} updates.",
                 ]
             );
         }

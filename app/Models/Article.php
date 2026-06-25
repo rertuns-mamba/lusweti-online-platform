@@ -47,6 +47,37 @@ class Article extends Model implements HasMedia
         'content_type', // <-- Added this to bridge the architectures perfectly
     ];
 
+    protected $visible = [
+        'id',
+        'user_id',
+        'category_id',
+        'page_id',
+        'topic_label',
+        'title',
+        'slug',
+        'summary',
+        'content',
+        'external_url',
+        'image_path',
+        'layout_type',
+        'layout_style',
+        'layout_options',
+        'is_featured_in_row',
+        'is_prime',
+        'display_style',
+        'display_layout',
+        'published_at',
+        'is_visible',
+        'is_active',
+        'is_youtube',
+        'video_url',
+        'featured_image_thumb_url',
+        'content_type',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     // Always cast your booleans and dates!
     protected function casts(): array
     {
@@ -63,13 +94,13 @@ class Article extends Model implements HasMedia
     protected static function booted(): void
     {
         static::saving(function (Article $article) {
-            if (empty($article->slug) && !empty($article->title)) {
+            if (empty($article->slug) && ! empty($article->title)) {
                 $article->slug = Str::slug($article->title);
                 $originalSlug = $article->slug;
                 $counter = 1;
 
                 while (Article::where('slug', $article->slug)->where('id', '!=', $article->id)->exists()) {
-                    $article->slug = $originalSlug . '-' . $counter++;
+                    $article->slug = $originalSlug.'-'.$counter++;
                 }
             }
         });
@@ -80,7 +111,7 @@ class Article extends Model implements HasMedia
                     broadcast(new ArticlePublished($article))->toOthers();
                 }
                 if ($article->external_url && $article->wasChanged('external_url') && ! app()->runningInConsole()) {
-                    ScrapeExternalArticleCover::dispatchAfterResponse($article->id);
+                    ScrapeExternalArticleCover::dispatchSync(self::class, $article->id);
                 }
             } catch (\Exception $e) {
                 logger()->error('Failed to broadcast article update', [

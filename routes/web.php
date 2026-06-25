@@ -50,17 +50,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/stream', [StreamController::class, 'index'])->name('stream');
 
-// 1. Core Root Route for the Homepage
+// 1. Core Root Route for the Homepage - redirects to general-sports page
 Route::get('/', function () {
-    $page = Page::with(['sections' => function ($query) {
-        $query->where('is_active', true)->orderBy('sort_order');
-    }])->where('slug', 'home')->first();
-
-    if (! $page) {
-        return view('welcome');
-    }
-
-    return view('pages.home', compact('page'));
+    return redirect()->route('page.show', 'general-sports');
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {

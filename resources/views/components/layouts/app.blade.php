@@ -8,32 +8,21 @@
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- Page-specific meta overrides --}}
+    <livewire.frontend.google-analytics />
+
     @yield('meta')
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
-    </style>
+    
 </head>
 
 <body class="antialiased">
 
     <livewire:global.page-header />
-    <x-frontend.navbar />
-
-
-    {{-- <livewire:frontend.navigation-menu :currentSlug="$slug ?? null" /> 
-
-    <livewire:frontend.site-header />
-    <livewire:frontend.page-header-meta /> --}}
+    <x-frontend.navbar />    
     <main>
         {{ $slot }}
     </main>
 
     <livewire:frontend.global-page-footer /> 
-
-    {{-- Authentication Modals
-    <livewire:auth.auth-modal /> --}}
     @livewireScripts
     <script>
         document.addEventListener('DOMContentLoaded', function() {

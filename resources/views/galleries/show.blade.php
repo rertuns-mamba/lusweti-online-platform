@@ -23,9 +23,9 @@
         </script>
     @endpush
 
-    <div class="min-h-screen bg-slate-950 text-slate-100">
-        <header class="border-b border-white/5 bg-slate-950/80 backdrop-blur-lg">
-            <div class="mx-auto max-w-[1600px] px-4 py-6 lg:px-8">
+    <div class="min-h-screen  text-slate-700 max-w-7xl mx-auto">
+        <header class="border-b border-white/5  backdrop-blur-lg">
+            <div class="mx-auto max-w-[1600px]  py-6 ">
                 <a href="{{ route('galleries.index') }}" class="text-slate-400 hover:text-white transition-colors">
                     ← Back to Galleries
                 </a>
@@ -38,7 +38,7 @@
             </div>
         </header>
 
-        <main class="mx-auto max-w-[1600px] px-4 py-8 lg:px-8">
+        <main class="mx-auto max-w-[1600px]  py-8 ">
             @if($gallery->getFirstMediaUrl('gallery_cover'))
                 <div class="mb-8 rounded-2xl overflow-hidden bg-slate-900">
                     <img 

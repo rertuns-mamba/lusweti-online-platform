@@ -13,18 +13,18 @@ class PageSeeder extends Seeder
     public function run(): void
     {
         Page::create([
-            'title' => 'Sports',
-            'slug' => 'sports',
+            'title' => 'General Sports',
+            'slug' => 'general-sports',
             'is_active' => true,
-            'sort_order' => 3,
+            'sort_order' => 1,
         ]);
 
-        Page::create([
-            'title' => 'Entertainment',
-            'slug' => 'entertainment',
-            'is_active' => true,
-            'sort_order' => 2,
-        ]);
+        // Page::create([
+        //     'title' => 'Entertainment',
+        //     'slug' => 'entertainment',
+        //     'is_active' => true,
+        //     'sort_order' => 2,
+        // ]);
 
     }
 }

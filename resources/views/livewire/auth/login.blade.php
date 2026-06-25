@@ -1,4 +1,4 @@
-<div class="min-h-[calc(100vh-120px)] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-neutral-950 text-white selection:bg-red-600 selection:text-white"
+<div class="min-h-[calc(100vh-120px)] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 text-white selection:bg-red-600 selection:text-white"
      x-data="{ 
         showPassword: false,
         tiltX: 0, tiltY: 0,

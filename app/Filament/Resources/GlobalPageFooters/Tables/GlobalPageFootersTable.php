@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\GlobalPageFooters\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class GlobalPageFootersTable
@@ -13,18 +12,27 @@ class GlobalPageFootersTable
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('brand_name')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Brand'),
+
+                TextColumn::make('brand_description')
+                    ->limit(30)
+                    ->label('Description'),
+
+                TextColumn::make('copyright_text')
+                    ->limit(30)
+                    ->label('Copyright'),
+
+                TextColumn::make('updated_at')
+                    ->dateTime('M j, Y h:i A')
+                    ->sortable()
+                    ->label('Last Updated'),
             ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
+            ->actions([
                 EditAction::make(),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->defaultSort('updated_at', 'desc');
     }
 }

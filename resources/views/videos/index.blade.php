@@ -1,13 +1,13 @@
 <x-layouts.app :title="__('Videos')">
-    <div class="min-h-screen bg-slate-950 text-slate-100">
-        <header class="border-b border-white/5 bg-slate-950/80 backdrop-blur-lg">
-            <div class="mx-auto max-w-[1600px] px-4 py-6 lg:px-8">
+    <div class="min-h-screen max-w-7xl mx-auto text-slate-700">
+        <header class="border-b border-white/5  backdrop-blur-lg">
+            <div class="mx-auto max-w-[1600px] py-6 ">
                 <h1 class="text-3xl font-bold">Videos</h1>
                 <p class="text-slate-400 mt-2">Browse all video content</p>
             </div>
         </header>
 
-        <main class="mx-auto max-w-[1600px] px-4 py-8 lg:px-8">
+        <main class="mx-auto max-w-[1600px] py-8 ">
             @if($videos->count() > 0)
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     @foreach($videos as $video)
