@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="space-y-1">
-                    <h2 class="text-2xl lg:text-3xl font-black tracking-tight text-neutral-900 uppercase">
+                    <h2 class="text-2xl  font-black tracking-tight text-neutral-900 uppercase">
                         {{ $this->category->title }}
                     </h2>
                     <p class="text-xs font-normal text-neutral-500">
