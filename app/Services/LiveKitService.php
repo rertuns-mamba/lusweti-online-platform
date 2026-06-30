@@ -9,9 +9,7 @@ use Agence104\LiveKit\VideoGrant;
 class LiveKitService
 {
     protected string $apiKey;
-
     protected string $apiSecret;
-
     protected string $url;
 
     public function __construct()
@@ -25,16 +23,16 @@ class LiveKitService
     {
         $identity = $user
             ? (string) $user->id
-            : 'guest_'.uniqid();
+            : 'guest_' . uniqid();
 
         $name = $user->name ?? 'Guest';
 
-        $options = (new AccessTokenOptions)
+        $options = (new AccessTokenOptions())
             ->setIdentity($identity)
             ->setName($name)
             ->setTtl(3600);
 
-        $grant = (new VideoGrant)
+        $grant = (new VideoGrant())
             ->setRoomJoin(true)
             ->setRoomName($room)
             ->setCanSubscribe(true);

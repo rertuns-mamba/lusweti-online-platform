@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\File;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use RuntimeException;
 
 class RecordingService
@@ -11,13 +12,22 @@ class RecordingService
     /**
      * Store incoming temporary WebM stream chunks.
      */
+    // public function storeChunk(string $sessionId, string $participantId, UploadedFile $chunk): void
+    // {
+    //     $path = "recordings/{$sessionId}/{$participantId}/chunks/";
+    //     $filename = uniqid() . '.webm';
+
+    //     Storage::putFileAs($path, $chunk, $filename);
+    // }
+
+
     public function storeChunk($sessionId, $participantId, $chunkFile, $chunkIndex)
     {
-        $directory = storage_path('app/public/recordings/'.$sessionId);
-        $filePath = $directory.'/audio.webm';
+        $directory = storage_path('app/public/recordings/' . $sessionId);
+        $filePath = $directory . '/audio.webm';
 
         // 1. Create directory if it doesn't exist
-        if (! file_exists($directory)) {
+        if (!file_exists($directory)) {
             mkdir($directory, 0775, true);
         }
 
@@ -34,7 +44,7 @@ class RecordingService
         $chunkPath = storage_path("app/recordings/{$sessionId}/{$participantId}/chunks");
         $outputPath = storage_path("app/recordings/{$sessionId}/{$participantId}");
 
-        if (! File::exists($chunkPath)) {
+        if (!File::exists($chunkPath)) {
             throw new RuntimeException("No recorded chunks found for participant: {$participantId}");
         }
 
@@ -42,21 +52,22 @@ class RecordingService
 
         // Sort chunks sequentially
         $files = collect(File::files($chunkPath))
-            ->sortBy(fn ($file) => $file->getFilename());
+            ->sortBy(fn($file) => $file->getFilename());
 
         // Construct FFmpeg list manifest
         $listFile = "{$chunkPath}/list.txt";
         $content = $files
-            ->map(fn ($file) => "file '{$file->getPathname()}'")
+            ->map(fn($file) => "file '{$file->getPathname()}'")
             ->implode("\n");
 
         File::put($listFile, $content);
 
         // Execute linear chunk stitching via copy-demuxer
 
+
         // Added -fflags +genpts and -async 1 to repair timeline gaps
         $cmd = sprintf(
-            'ffmpeg -fflags +genpts -f concat -safe 0 -i %s -c copy -async 1 %s 2>&1',
+            "ffmpeg -fflags +genpts -f concat -safe 0 -i %s -c copy -async 1 %s 2>&1",
             escapeshellarg($listFile),
             escapeshellarg($finalPrivateFile)
         );
@@ -67,8 +78,8 @@ class RecordingService
         // );
         exec($cmd);
 
-        if (! File::exists($finalPrivateFile)) {
-            throw new RuntimeException('FFmpeg failed compilation processing for final sequence.');
+        if (!File::exists($finalPrivateFile)) {
+            throw new RuntimeException("FFmpeg failed compilation processing for final sequence.");
         }
 
         // Bridge file to the public disk mirror
@@ -80,6 +91,11 @@ class RecordingService
         return asset(Storage::url($publicPath));
     }
 
+
+
+
+
+
     /**
      * Compile separate participant streams into a synchronous multi-track asset.
      */
@@ -87,14 +103,14 @@ class RecordingService
     {
         $basePath = storage_path("app/recordings/{$sessionId}");
 
-        if (! File::exists($basePath)) {
-            throw new RuntimeException('Target session directory layout missing.');
+        if (!File::exists($basePath)) {
+            throw new RuntimeException("Target session directory layout missing.");
         }
 
         $participants = File::directories($basePath);
 
         if (count($participants) === 0) {
-            throw new RuntimeException('No active participant feeds available for merging.');
+            throw new RuntimeException("No active participant feeds available for merging.");
         }
 
         // $inputs = '';
@@ -120,17 +136,15 @@ class RecordingService
         $inputCount = 0;
 
         foreach ($participants as $index => $dir) {
-            $finalFile = $dir.'/final.webm';
-            if (! File::exists($finalFile)) {
-                continue;
-            }
+            $finalFile = $dir . '/final.webm';
+            if (!File::exists($finalFile)) continue;
 
-            $inputs .= ' -i '.escapeshellarg($finalFile).' ';
+            $inputs .= " -i " . escapeshellarg($finalFile) . " ";
             $inputCount++;
         }
 
         if ($inputCount === 0) {
-            throw new RuntimeException('No valid final webm files to merge.');
+            throw new RuntimeException("No valid final webm files to merge.");
         }
 
         $output = "{$basePath}/final-output.wav";
@@ -139,12 +153,12 @@ class RecordingService
         // duration=longest ensures the track doesn't cut off when the first person stops talking
         $filter = "-filter_complex amix=inputs={$inputCount}:duration=longest";
 
-        $cmd = "ffmpeg {$inputs} {$filter} -c:a pcm_s16le ".escapeshellarg($output).' 2>&1';
+        $cmd = "ffmpeg {$inputs} {$filter} -c:a pcm_s16le " . escapeshellarg($output) . " 2>&1";
 
         exec($cmd);
 
-        if (! File::exists($output)) {
-            throw new RuntimeException('Multi-track generation matrix process failed.');
+        if (!File::exists($output)) {
+            throw new RuntimeException("Multi-track generation matrix process failed.");
         }
 
         return $output;
@@ -158,20 +172,20 @@ class RecordingService
         $input = storage_path("app/recordings/{$sessionId}/final-output.wav");
         $output = storage_path("app/recordings/{$sessionId}/clean.wav");
 
-        if (! File::exists($input)) {
-            throw new RuntimeException('Master audio matrix not found for optimization pipeline.');
+        if (!File::exists($input)) {
+            throw new RuntimeException("Master audio matrix not found for optimization pipeline.");
         }
 
         $cmd = sprintf(
-            'ffmpeg -i %s -af silenceremove=start_periods=1:start_duration=0.5:start_threshold=-40dB:stop_periods=-1:stop_duration=0.8:stop_threshold=-40dB %s 2>&1',
+            "ffmpeg -i %s -af silenceremove=start_periods=1:start_duration=0.5:start_threshold=-40dB:stop_periods=-1:stop_duration=0.8:stop_threshold=-40dB %s 2>&1",
             escapeshellarg($input),
             escapeshellarg($output)
         );
 
         exec($cmd);
 
-        if (! File::exists($output)) {
-            throw new RuntimeException('FFmpeg failed to generate silenceremove track pipeline.');
+        if (!File::exists($output)) {
+            throw new RuntimeException("FFmpeg failed to generate silenceremove track pipeline.");
         }
 
         return 'clean.wav';

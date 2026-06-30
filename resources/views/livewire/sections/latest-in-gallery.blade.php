@@ -12,26 +12,26 @@
         if ($count <= 4) {
             $mobileRadius = 140;
             $tabletRadius = 190;
-            $desktopRadius = 240;
+            $desktopRadius = 210;
         } elseif ($count <= 6) {
             $mobileRadius = 170;
             $tabletRadius = 230;
-            $desktopRadius = 290;
+            $desktopRadius = 250;
         } else {
             $mobileRadius = 190;
             $tabletRadius = 260;
-            $desktopRadius = 330;
+            $desktopRadius = 290;
         }
     @endphp
 
-    <section class="relative w-full py-12 md:py-16 overflow-hidden bg-white font-sans">
+    <section class="relative w-full py-12 md:py- overflow-hidden bg-white font-sans">
 
         {{-- Category Identity Banner --}}
         @if($this->category)
-            <div class="mx-auto max-w-7xl mb-6 px-4 md:px-0">
+            <div class="mx-auto max-w-7xl mb-4 px-4 md:px-0">
                 <div class="border-t-2 border-[#B80000] pt-3">
                     <div class="flex items-end justify-between border-b-2 border-gray-900 pb-2">
-                        <a href="/ms/{{ $this->category->slug }}"
+                        <a href="/cbs/{{ $this->category->slug }}"
                            wire:navigate
                            class="inline-block px-3 py-1 text-xs font-black uppercase tracking-widest rounded-none transition-opacity hover:opacity-90"
                            style="background: {{ $this->category->bg_color ?? '#e50000' }}; color: {{ $this->category->text_color ?? '#ffffff' }};">

@@ -243,12 +243,12 @@ class Article extends Model implements HasMedia
             ->width(400)
             ->height(225)
             ->sharpen(10)
-            ->nonQueued();
+            ->queued();
 
         $this->addMediaConversion('hero')
             ->width(1200)
             ->height(675)
             ->withResponsiveImages()
-            ->nonQueued();
+            ->queued();
     }
 }

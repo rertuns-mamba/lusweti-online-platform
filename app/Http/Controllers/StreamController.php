@@ -17,17 +17,21 @@ class StreamController extends Controller
             'is_live' => false,
         ]);
 
-        // Generate LiveKit token
+        // Check if user is authenticated and should be host
+        $user = Auth::user();
+        $isHost = $user && $user->is_admin ?? false;
+
+        // Generate LiveKit token (pass null for guests)
         $tokenData = $liveKitService->generateToken(
-            Auth::user(),
+            $user,
             $stream->uuid,
-            true // isHost
+            $isHost
         );
 
         return view('pages.stream', [
             'token' => $tokenData['token'],
             'livekitUrl' => $tokenData['url'],
-            'isHost' => true, // Set to true for testing control buttons
+            'isHost' => $isHost,
             'stream' => $stream,
         ]);
     }

@@ -4,7 +4,7 @@
         {{-- BBC EDITORIAL HEADER --}}
         <div class="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between border-b-2 border-slate-900 pb-3 gap-4">
             <div class="flex items-center gap-4">
-                <a href="/ms/{{ $this->category->slug }}"
+                <a href="/cbs/{{ $this->category->slug }}"
                     wire:navigate
                     class="inline-block text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-none"
                     style="background-color: {{ $page?->bg_color ?? '#111827' }}; color: {{ $page?->text_color ?? '#ffffff' }};">

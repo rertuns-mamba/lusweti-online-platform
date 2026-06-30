@@ -1,4 +1,4 @@
-<header class="bg-neutral-950 text-white relative z-50 border-b border-neutral-800 select-none">
+<header class="bg-neutral-950 text-white relative py-4 z-50 border-b border-neutral-800 select-none">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="h-16 flex items-center justify-between">
             <div class="flex items-center gap-3 w-1/4 sm:w-1/3">
@@ -7,7 +7,7 @@
                         <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                     <span class="hidden md:block text-sm font-bold uppercase tracking-widest group-hover:text-white transition-colors">
-                        Menu
+                        <a href="" class="">E Paper</a>
                     </span>
                 </button>
             </div>
@@ -25,9 +25,9 @@
                 </a>
             </div>
 
-            <div class="flex items-center justify-end gap-3 sm:gap-5 w-1/4 sm:w-1/3">
+            <div class="flex items-center justify-end gap-4 sm:gap-6 w-auto sm:w-1/3">
 
-                <form action="{{ route('search') }}" method="GET" class="hidden lg:flex items-center">
+                <form action="{{ route('search') }}" method="GET" class="hidden lg:flex items-center flex-shrink-0">
                     <div class="flex items-center bg-neutral-900 border border-neutral-700 overflow-hidden focus-within:border-neutral-400 transition-colors">
                         <input type="text" name="query" placeholder="Search news..." class="w-32 xl:w-48 bg-transparent px-3 py-1.5 text-sm text-white placeholder-neutral-500 focus:outline-none">
                         <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 transition-colors">
@@ -38,22 +38,22 @@
                     </div>
                 </form>
 
-                <button class="lg:hidden text-neutral-400 hover:text-red-500 transition-colors p-1">
+                <button class="lg:hidden text-neutral-400 hover:text-red-500 transition-colors p-1 flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.65 5.65a7.5 7.5 0 0010.6 10.6z" />
                     </svg>
                 </button>
 
-                <div class="hidden sm:block h-6 w-px bg-neutral-800"></div>
+                <div class="hidden sm:block h-6 w-px bg-neutral-800 flex-shrink-0"></div>
 
                 @auth
-                <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                <div class="relative flex-shrink-0" x-data="{ open: false }" @click.away="open = false">
                     <button @click="open = !open" class="flex items-center space-x-3 focus:outline-none p-1 group">
-                        <span class="text-xs sm:text-sm font-bold hidden md:inline-block tracking-wide text-neutral-300 group-hover:text-white transition-colors">
+                        <span class="text-xs sm:text-sm font-bold hidden md:inline-block tracking-wide text-neutral-300 group-hover:text-white transition-colors whitespace-nowrap">
                             {{ Auth::user()->name }}
                         </span>
 
-                        <div class="h-8 w-8 sm:h-9 sm:w-9 bg-neutral-800 border border-neutral-700 flex items-center justify-center overflow-hidden group-hover:border-red-600 transition-colors">
+                        <div class="h-8 w-8 sm:h-9 sm:w-9 bg-neutral-800 border border-neutral-700 flex items-center justify-center overflow-hidden group-hover:border-red-600 transition-colors flex-shrink-0">
                             @if(Auth::user()->avatar_url)
                             <img src="{{ Auth::user()->avatar_url }}" alt="Profile Avatar" class="h-full w-full object-cover">
                             @else
@@ -87,13 +87,21 @@
                     </div>
                 </div>
                 @else
-                <div class="flex items-center space-x-3 sm:space-x-4">
-                    <a href="{{ route('login') }}" class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-400 hover:text-white transition-colors hidden sm:flex">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+                    <a href="{{ route('subscribe') }}" class="flex items-center gap-2 px-3 py-2 text-xs font-bold uppercase tracking-widest text-red-500 hover:text-red-400 hover:bg-neutral-900 transition-colors hidden sm:flex border border-transparent hover:border-red-600">
+                        <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <span class="whitespace-nowrap">Subscribe</span>
+                    </a>
+                    @guest
+                    <a href="{{ route('login') }}" wire:navigate class="flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white bg-red-600 hover:bg-red-700 transition-colors hidden sm:flex border border-red-600">
+                        <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                         </svg>
-                        Sign In
+                        <span class="whitespace-nowrap">Sign In</span>
                     </a>
+                    @endguest
                 </div>
                 @endauth
 
@@ -105,6 +113,10 @@
 <nav id="default-nav" class="bg-white border-b border-gray-200 shadow-sm relative z-40 transition-all duration-300">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-6 lg:gap-8 py-3 overflow-x-auto whitespace-nowrap scrollbar-hide text-[13px] md:text-sm font-bold uppercase tracking-widest text-gray-800">
+            <a href="{{ route('stream') }}" class="relative group hover:text-red-600 transition-colors pb-1 {{ request()->is('stream') ? 'text-red-600' : '' }}">
+                Watch Live
+                <span class="absolute bottom-0 left-0 w-full h-[3px] bg-red-600 transform origin-left transition-transform duration-200 {{ request()->is('stream') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100' }}"></span>
+            </a>
             @foreach($pages as $page)
             @php
             // Intercept the 'home' slug to use the root URL and exact root request match
@@ -123,7 +135,7 @@
 
 <livewire:sections.breaking-news />
 
-<nav id="dropdown-menu" class="hidden bg-neutral-100 border-b border-gray-300 shadow-inner absolute w-full z-30 transition-all duration-300">
+<nav id="dropdown-menu" class="hidden bg-neutral-50 border-b border-gray-300 shadow-inner absolute w-full z-30 transition-all duration-300">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-y-6 gap-x-8 text-[13px] md:text-sm font-bold uppercase tracking-wider">
             @foreach($pages as $page)

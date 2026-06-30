@@ -28,6 +28,22 @@ services:
       - "6379:6379"
     networks:
       - livekit-network
+  
+  srs:
+    image: ossrs/srs:latest
+    container_name: srs_server
+    ports:
+      - "1935:1935" # RTMP
+      - "1985:1985" # HTTP API
+      - "8080:8080" # HLS/HTTP
+    volumes:
+      # 1. Persist Configuration: So your custom settings survive restarts
+      - ./srs/conf:/usr/local/srs/conf
+      # 2. Persist Output: So your HLS files (the actual broadcast) survive
+      - ./srs/data:/usr/local/srs/objs/nginx/html
+      # 3. Persist Logs: Optional, but helpful for debugging
+      - ./srs/logs:/usr/local/srs/objs
+    restart: always
 
 networks:
   livekit-network:

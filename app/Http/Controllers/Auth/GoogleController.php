@@ -41,7 +41,7 @@ class GoogleController extends Controller
             }
 
             Auth::login($user, true);
-            return redirect()->intended('/home');
+            return redirect()->intended('/');
 
         } catch (\Exception $e) {
             return redirect()->route('login')->withErrors([

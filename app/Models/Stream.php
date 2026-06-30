@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
-use App\Concerns\Searchable;
 
-class Stream extends Model 
+class Stream extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory;
 
     protected $fillable = [
         'uuid',
@@ -18,6 +17,7 @@ class Stream extends Model
         'title',
         'is_live',
         'livekit_room',
+        'egress_id',
         'description',
         'status',
         'scheduled_for',
@@ -25,11 +25,8 @@ class Stream extends Model
 
 
     protected $casts = [
-        'scheduled_for' => 'datetime',
-    ];
-
-
-    
+    'scheduled_for' => 'datetime',
+];
 
     public function user()
     {

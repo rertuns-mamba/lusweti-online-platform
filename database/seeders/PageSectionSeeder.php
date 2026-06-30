@@ -135,17 +135,32 @@ class PageSectionSeeder extends Seeder
                 'is_active' => true,
                 'is_visible' => true,
             ],
-            [
-                'title' => 'Sports News',
-                'category_id' => $this->getCategoryId('business'),
-                'layout_type' => 'sections.editorial-grid-block',
-                'component' => 'sections.editorial-grid-block',
+
+
+
+             [
+                'title' => 'International Sports',
+                'category_id' => $this->getCategoryId('spoti-majuu'),
+                'layout_type' => 'sections.spoti-majuu-block',
+                'component' => 'sections.spoti-majuu-block',
                 'model_type' => Article::class,
                 'limit' => 10,
                 'sort_order' => 2,
                 'is_active' => true,
                 'is_visible' => true,
             ],
+            [
+                'title' => 'Sports News',
+                'category_id' => $this->getCategoryId('business'),
+                'layout_type' => 'sections.editorial-grid-block',
+                'component' => 'sections.editorial-grid-block',
+                'model_type' => Article::class,
+                'limit' => 9,
+                'sort_order' => 2,
+                'is_active' => true,
+                'is_visible' => true,
+            ],
+            
 
             [
                 'title' => 'Most Featured',
@@ -157,28 +172,19 @@ class PageSectionSeeder extends Seeder
                 'is_active' => true,
                 'settings' => ['show_sidebar' => true, 'show_video' => false],
             ],
+
+            
             [
                 'title' => 'Galla Sports',
                 'component' => 'sections.latest-in-gallery',
                 'model_type' => Article::class,
                 'category_id' => $this->getCategoryId('latest-in-gallery'),
                 'limit' => 9,
-                'sort_order' => 4, // Fixed ordering collision
+                'sort_order' => 3, // Fixed ordering collision
                 'is_active' => true,
-            ],
-            
+            ],           
            
-            [
-                'title' => 'International Sports',
-                'category_id' => $this->getCategoryId('spoti-majuu'),
-                'layout_type' => 'sections.spoti-majuu-block',
-                'component' => 'sections.spoti-majuu-block',
-                'model_type' => Article::class,
-                'limit' => 9,
-                'sort_order' => 2,
-                'is_active' => true,
-                'is_visible' => true,
-            ],
+           
             [
                 'title' => 'Video Highlights',
                 'category_id' => $this->getCategoryId('videos'),
@@ -186,7 +192,7 @@ class PageSectionSeeder extends Seeder
                 'component' => 'sections.videos',
                 'model_type' => Article::class,
                 'limit' => 9,
-                'sort_order' => 3,
+                'sort_order' => 4,
                 'is_active' => true,
                 'is_visible' => true,
             ],
@@ -228,14 +234,24 @@ class PageSectionSeeder extends Seeder
                 'settings' => ['category_id' => $this->getCategoryId('spoti-kenya')],
             ],
             [
-                'title' => 'Video Highlights',
-                'component' => 'sections.videos',
+                'title' => 'Most Featured',
+                'component' => 'sections.most-featured', // ✨ Updated to match what your frontend expects
                 'model_type' => Article::class,
-                'category_id' => $this->getCategoryId('videos'),
-                'limit' => 9,
-                'sort_order' => 5,
+                'category_id' => $this->getCategoryId('most-featured'),
+                'limit' => 8,
+                'sort_order' => 2,
                 'is_active' => true,
+                'settings' => ['show_sidebar' => true, 'show_video' => false],
             ],
+            // [
+            //     'title' => 'Video Highlights',
+            //     'component' => 'sections.videos',
+            //     'model_type' => Article::class,
+            //     'category_id' => $this->getCategoryId('videos'),
+            //     'limit' => 9,
+            //     'sort_order' => 5,
+            //     'is_active' => true,
+            // ],
             [
                 'title' => 'Gallery Highlights',
                 'component' => 'sections.galleries',
@@ -272,13 +288,14 @@ class PageSectionSeeder extends Seeder
                 'settings' => ['category_id' => $this->getCategoryId('spoti-majuu')],
             ],
             [
-                'title' => 'Video Highlights',
-                'component' => 'sections.videos',
+                'title' => 'Most Featured',
+                'component' => 'sections.most-featured', // ✨ Updated to match what your frontend expects
                 'model_type' => Article::class,
-                'category_id' => $this->getCategoryId('videos'),
+                'category_id' => $this->getCategoryId('most-featured'),
                 'limit' => 9,
                 'sort_order' => 5,
                 'is_active' => true,
+                'settings' => ['show_sidebar' => true, 'show_video' => false],
             ],
             [
                 'title' => 'Gallery Highlights',
@@ -307,39 +324,43 @@ class PageSectionSeeder extends Seeder
         $burudaniPage = Page::updateOrCreate(['slug' => 'burudani'], ['title' => 'Burudani', 'nav_order' => 4, 'show_in_nav' => true]);
 
         $burudaniSections = [
-
-          [
+            [
                 'title' => 'Sports News',
                 'category_id' => $this->getCategoryId('business'),
                 'layout_type' => 'sections.editorial-grid-block',
                 'component' => 'sections.editorial-grid-block',
                 'model_type' => Article::class,
-                'limit' => 10,
-                'sort_order' => 2,
+                'limit' => 7,
+                'sort_order' => 1,
                 'is_active' => true,
                 'is_visible' => true,
             ],
+
+          [
+                'title' => 'Latest Sports Highlights',
+                'category_id' => $this->getCategoryId('general-sports'),
+                'layout_type' => 'sections.hero',
+                'component' => 'sections.hero',
+                'model_type' => Article::class,
+                'limit' => 10,
+                'sort_order' => 1,
+                'is_active' => true,
+                'is_visible' => true,
+            ],
+            
             [
                 'title' => 'Burudani',
                 'component' => 'sections.most-featured',
                 'model_type' => Article::class,
                 'category_id' => $this->getCategoryId('most-featured'),
-                'limit' => 9,
+                'limit' => 10,
                 'sort_order' => 2,
                 'is_active' => true,
                 'settings' => ['show_sidebar' => true, 'show_video' => false],
             ],           
 
 
-            [
-                'title' => 'Video Highlights',
-                'component' => 'sections.videos',
-                'model_type' => Article::class,
-                'category_id' => $this->getCategoryId('videos'),
-                'limit' => 9,
-                'sort_order' => 5,
-                'is_active' => true,
-            ],
+           
             [
                 'title' => 'Gallery Highlights',
                 'component' => 'sections.galleries',
@@ -375,8 +396,18 @@ class PageSectionSeeder extends Seeder
                 'model_type' => Article::class,
                 'category_id' => $this->getCategoryId('hadithi'),
                 'limit' => 10,
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+             [
+                'title' => 'Most Featured',
+                'component' => 'sections.most-featured', // ✨ Updated to match what your frontend expects
+                'model_type' => Article::class,
+                'category_id' => $this->getCategoryId('most-featured'),
+                'limit' => 10,
                 'sort_order' => 2,
                 'is_active' => true,
+                'settings' => ['show_sidebar' => true, 'show_video' => false],
             ],
             [
                 'title' => 'Gallery Highlights',
@@ -384,7 +415,7 @@ class PageSectionSeeder extends Seeder
                 'model_type' => Article::class,
                 'category_id' => $this->getCategoryId('gallery'),
                 'limit' => 9,
-                'sort_order' => 4,
+                'sort_order' => 1,
                 'is_active' => true,
             ],
             [
@@ -393,7 +424,7 @@ class PageSectionSeeder extends Seeder
                 'model_type' => Article::class,
                 'category_id' => $this->getCategoryId('videos'),
                 'limit' => 9,
-                'sort_order' => 6,
+                'sort_order' => 2,
                 'is_active' => true,
             ],
         ];

@@ -5,6 +5,7 @@ namespace App\Livewire\Auth;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 use Livewire\Attributes\Layout;
@@ -26,14 +27,17 @@ class Login extends Component
     {
         $this->validate();
 
-        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        $attempt = Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember);
+
+        if (!$attempt) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
         }
 
         session()->regenerate();
-        return redirect()->intended('/home');
+        
+        return redirect()->intended('/');
     }
 
     public function render()

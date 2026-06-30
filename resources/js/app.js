@@ -1,11 +1,3 @@
-// 
-
-
-
-
-
-
-
 /**
  * 1. IMPORTS & DEPENDENCIES
  */
@@ -140,20 +132,12 @@ document.addEventListener('alpine:init', () => {
                         }
                         this.reconnecting = false;
                     }
-
                     if (state === ConnectionState.Reconnecting) {
                         this.reconnecting = true;
                     }
-
                     if (state === ConnectionState.Disconnected) {
-                        this.isLive = false;
                         this.isConnecting = false;
-                        console.warn('LiveKit room disconnected. Verify your token, room name, and LiveKit server URL.');
                     }
-                });
-
-                this.room.on(RoomEvent.ConnectionError, (error) => {
-                    console.error('LiveKit connection error:', error);
                 });
 
                 this.room.on(RoomEvent.TrackSubscribed, (track) => {
@@ -227,33 +211,7 @@ document.addEventListener('alpine:init', () => {
                 this.attachLocalPreview();
 
                 if (this.room.state !== this.ConnectionState.Connected) {
-                    if (this.room.state === this.ConnectionState.Connecting) {
-                        console.log('LiveKit is still connecting; waiting for connection before publishing.');
-                        await new Promise((resolve, reject) => {
-                            const onStateChange = (nextState) => {
-                                if (nextState === this.ConnectionState.Connected) {
-                                    clearTimeout(timeout);
-                                    this.room.off(RoomEvent.ConnectionStateChanged, onStateChange);
-                                    resolve();
-                                }
-
-                                if (nextState === this.ConnectionState.Disconnected) {
-                                    clearTimeout(timeout);
-                                    this.room.off(RoomEvent.ConnectionStateChanged, onStateChange);
-                                    reject(new Error('LiveKit disconnected before publish'));
-                                }
-                            };
-
-                            const timeout = setTimeout(() => {
-                                this.room.off(RoomEvent.ConnectionStateChanged, onStateChange);
-                                reject(new Error('LiveKit connect timed out before publish'));
-                            }, 15000);
-
-                            this.room.on(RoomEvent.ConnectionStateChanged, onStateChange);
-                        });
-                    } else {
-                        await this.room.connect(this.url, this.token);
-                    }
+                    await this.room.connect(this.url, this.token);
                 }
 
                 await this.room.localParticipant.publishTrack(this.videoTrack);

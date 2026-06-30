@@ -5,14 +5,14 @@
         {{-- BBC EDITORIAL HEADER --}}
         <div class="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between border-b-2 border-slate-900 pb-3 gap-4">
             <div class="flex flex-wrap items-center gap-3 sm:gap-4">
-                <a href="/ms/{{ $section->page->slug }}" 
+                <a href="/cbs/{{ $section->page->slug }}" 
                     class="inline-block text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-none"
                     style="background-color: {{ $section->page->bg_color }}; color: {{ $section->page->text_color }};">
                     {{ $this->category->name }}
                 </a>
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Latest Hadithi</span>
             </div>
-            <a href="/ms/{{ $section->page->slug }}" class="text-xs font-bold uppercase text-slate-500 hover:text-slate-900">See All &rarr;</a>
+            <a href="/cbs/{{ $section->page->slug }}" class="text-xs font-bold uppercase text-slate-500 hover:text-slate-900">See All &rarr;</a>
         </div>
 
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-6">

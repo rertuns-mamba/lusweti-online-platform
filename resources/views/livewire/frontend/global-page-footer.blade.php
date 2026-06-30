@@ -1,4 +1,4 @@
-<footer class="bg-black text-white border-t border-gray-800 mt-16">
+<footer class="bg-black text-white border-t border-gray-800 mt-2">
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -10,10 +10,7 @@
 
                 <!-- Brand -->
 
-                <div>
-
-
-                   
+                <div>             
 
 
                     <a href="/" class="flex items-center space-x-2 sm:space-x-4 group">

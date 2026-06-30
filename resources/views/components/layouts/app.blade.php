@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +8,18 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- Page-specific meta overrides --}}
     <livewire.frontend.google-analytics />
-
-    @yield('meta')
-    
+    @yield('meta')    
 </head>
 
-<body class="antialiased">
-
-    <livewire:global.page-header />
-    <x-frontend.navbar />    
-    <main>
+<body class="antialiased ">    
+    <x-frontend.navbar />  
+    <livewire:global.page-header />  
+    <main class="bg-[#fff]">
         {{ $slot }}
     </main>
-
     <livewire:frontend.global-page-footer /> 
     @livewireScripts
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, Livewire:', typeof window.Livewire, 'Alpine:', typeof window.Alpine);
@@ -44,8 +40,6 @@
             });
         });
     </script>
-
-
     <!-- TOGGLE LOGIC WITH SAFETY CHECKS -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -69,13 +63,8 @@
             }
         });
     </script>
-
-
     @stack('scripts')
-
-
     <livewire:article-preview-modal />
-
 </body>
 
 </html>

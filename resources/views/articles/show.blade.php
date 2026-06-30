@@ -1,6 +1,4 @@
-<x-layouts.app>
-    <livewire:global.page-header />
-    
+<x-layouts.app>   
     <div class="bg-white min-h-screen antialiased"
         x-data="{ 
             percent: 0, 

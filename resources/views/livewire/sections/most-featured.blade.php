@@ -10,39 +10,44 @@
     }
 }">
 
-    {{-- Header & Slider Controls --}}
-    <div class="mb-8 flex items-center justify-between">
-        {{-- Category Identity Banner --}}
-        @if ($this->category)
-            <div class="max-w-7xl mx-auto mb-6">
-                <div class="border-t-2 border-[#B80000] pt-3">
-                    <div class="flex items-end justify-start border-b-2 border-gray-900 pb-2">
-                        <a href="/ms/{{ $this->category->slug }}" wire:navigate
-                            class="inline-block px-3 py-1 text-xs font-black uppercase tracking-widest rounded-none transition-opacity hover:opacity-90"
-                            style="background: {{ $this->category->bg_color ?? '#e50000' }}; color: {{ $this->category->text_color ?? '#ffffff' }};">
-                            {{ $this->category->name }}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        @endif
 
-        {{-- Custom Navigation Buttons --}}
-        <div class="flex items-center gap-2">
-            <button @click="scrollPrev()"
-                class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-900 transition-colors focus:outline-none"
-                aria-label="Scroll left">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-            <button @click="scrollNext()"
-                class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-900 transition-colors focus:outline-none"
-                aria-label="Scroll right">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </button>
+    {{-- Header & Slider Controls --}}
+    <div class="max-w-7xl mx-auto mb-8 w-full">
+
+        {{-- Unified Flex Container with Borders --}}
+        <div class="flex items-center justify-between border-t-2 border-[#B80000]  pt-3 border-b-2 border-gray-900 pb-2">
+
+            {{-- Left: Category Identity Banner --}}
+            <div>
+                @if ($this->category)
+                    <a href="/cbs/{{ $this->category->slug }}" wire:navigate
+                        class="inline-block px-3 py-1 text-xs font-black uppercase tracking-widest rounded-none transition-opacity hover:opacity-90"
+                        style="background: {{ $this->category->bg_color ?? '#e50000' }}; color: {{ $this->category->text_color ?? '#ffffff' }};">
+                        {{ $this->category->name }}
+                    </a>
+                @endif
+            </div>
+
+            {{-- Right: Custom Navigation Buttons --}}
+            <div class="flex items-center gap-2">
+                <button @click="scrollPrev()"
+                    class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-900 transition-colors focus:outline-none"
+                    aria-label="Scroll left">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                </button>
+
+                <button @click="scrollNext()"
+                    class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-900 transition-colors focus:outline-none"
+                    aria-label="Scroll right">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+
         </div>
     </div>
 

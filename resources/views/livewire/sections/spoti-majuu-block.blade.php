@@ -6,14 +6,14 @@
 
         <div class="mx-auto mt-4">
             <div class="flex items-end justify-between border-b-2 border-gray-900 pb-2">
-                <a href="/ms/{{ $this->category->slug }}"
+                <a href="/cbs/{{ $this->category->slug }}"
                    wire:navigate
                    class="inline-block px-3 py-1 text-xs font-black uppercase tracking-widest rounded-none transition-opacity hover:opacity-90"
                    style="background: {{ $this->category->bg_color ?? '#e50000' }}; color: {{ $this->category->text_color ?? '#ffffff' }};">
                     {{ $this->category->name }}
                 </a>
 
-                <a href="/ms/{{ $this->category->slug }}"
+                <a href="/cbs/{{ $this->category->slug }}"
                    wire:navigate
                    class="text-xs font-bold uppercase tracking-wider text-gray-600 hover:text-red-600 flex items-center gap-1 transition-colors">
                     All {{ $this->category->name }}
