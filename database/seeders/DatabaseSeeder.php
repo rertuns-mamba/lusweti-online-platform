@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             SidebarWidgetSeeder::class,
             GalleryGridSeeder::class,
             PortalsSeeder::class,
+            SubscriberSeeder::class,
         ]);
     }
 }

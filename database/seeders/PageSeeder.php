@@ -17,14 +17,7 @@ class PageSeeder extends Seeder
             'slug' => 'general-sports',
             'is_active' => true,
             'sort_order' => 1,
-        ]);
-
-        // Page::create([
-        //     'title' => 'Entertainment',
-        //     'slug' => 'entertainment',
-        //     'is_active' => true,
-        //     'sort_order' => 2,
-        // ]);
+        ]);      
 
     }
 }

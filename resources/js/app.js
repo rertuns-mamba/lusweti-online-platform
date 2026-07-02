@@ -342,7 +342,7 @@ document.addEventListener('alpine:init', () => {
                 this.videoTrack.attach();
 
             el.className =
-                'w-full h-full object-contain bg-black';
+                'w-md h-md object-contain bg-black';
 
             el.autoplay = true;
             el.playsInline = true;
@@ -375,7 +375,7 @@ document.addEventListener('alpine:init', () => {
                 track.attach();
 
             el.className =
-                'w-full h-full object-contain bg-black';
+                'w-md h-md object-contain bg-black';
 
             el.autoplay = true;
             el.playsInline = true;
@@ -400,7 +400,7 @@ document.addEventListener('alpine:init', () => {
                 const container = document.getElementById('remoteVideos');
                 if (container) {
                     container.innerHTML = `
-                    <div class="w-full h-full flex items-center justify-center text-slate-400">
+                    <div class="w-md h-md flex items-center justify-center text-slate-400">
                         Waiting for live stream...
                     </div>`;
                 }

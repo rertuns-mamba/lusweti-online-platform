@@ -99,8 +99,8 @@
             </div>
 
         </div>
-
-        <div class="mt-12 border-t border-b border-slate-200 py-3 text-center rounded-none bg-transparent"></div>
+{{--         <div class="mt-12 border-t border-b border-slate-200 py-3 text-center rounded-none bg-transparent"></div>
+ --}}
     </section>
     @endif
 </div>

@@ -63,6 +63,8 @@ Route::get('/subscribe', Subscription::class)->name('subscribe');
 
 // Explicit routes to prevent conflicts with dynamic routes
 Route::get('/stream', [StreamController::class, 'index'])->name('stream');
+Route::post('/stream/{uuid}/end', [StreamController::class, 'end'])->name('stream.end');
+Route::post('/stream/{uuid}/start', [StreamController::class, 'start'])->name('stream.start');
 
 // Public content - accessible to guests
 Route::get('/search', [SearchController::class, 'index'])->name('search');

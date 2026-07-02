@@ -19,28 +19,67 @@ class StreamRoom extends Component
 
     public bool $isHost; // Critical: initialized once
 
+    // public function mount(Stream $stream, LiveKitService $livekit)
+    // {
+    //     $this->stream = $stream;
+
+    //     // Check if user is authenticated, otherwise use guest user
+    //     $user = Auth::check() ? Auth::user() : null;
+    //     $this->isHost = $user && $user->id === $stream->user_id;
+
+    //     // Debug logging
+    //     logger('StreamRoom: isHost = '.($this->isHost ? 'true' : 'false').', userId = '.($user ? $user->id : 'null').', streamUserId = '.$stream->user_id);
+
+    //     // Use livekit_room if available, otherwise use uuid, otherwise use id
+    //     $room = $stream->livekit_room ?? $stream->uuid ?? (string) $stream->id;
+
+    //     $data = $livekit->generateToken(
+    //         $user,
+    //         $room,
+    //         $this->isHost
+    //     );
+
+    //     $this->token = $data['token'];
+    //     $this->livekitUrl = $data['url'];
+    // }
+
+
     public function mount(Stream $stream, LiveKitService $livekit)
     {
         $this->stream = $stream;
 
-        // Check if user is authenticated, otherwise use guest user
         $user = Auth::check() ? Auth::user() : null;
         $this->isHost = $user && $user->id === $stream->user_id;
 
-        // Debug logging
-        logger('StreamRoom: isHost = '.($this->isHost ? 'true' : 'false').', userId = '.($user ? $user->id : 'null').', streamUserId = '.$stream->user_id);
 
-        // Use livekit_room if available, otherwise use uuid, otherwise use id
         $room = $stream->livekit_room ?? $stream->uuid ?? (string) $stream->id;
 
-        $data = $livekit->generateToken(
-            $user,
-            $room,
-            $this->isHost
-        );
-
+        $data = $livekit->generateToken($user, $room, $this->isHost);
         $this->token = $data['token'];
         $this->livekitUrl = $data['url'];
+    }
+
+
+
+
+    public function startStream()
+    {
+        if ($this->isHost) {
+            $this->stream->update(['is_live' => true]);
+        }
+    }
+
+
+    // --- ADD THIS NEW METHOD ---
+    public function endStream()
+    {
+        // Only the host is allowed to end the stream
+        if ($this->isHost) {
+            $this->stream->update(['is_live' => false]);
+
+            // Redirect the admin back to the home page
+            return redirect()->route('home');
+        }
     }
 
     public function render()

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,17 +9,31 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- Page-specific meta overrides --}}
     <livewire.frontend.google-analytics />
-    @yield('meta')    
+    @yield('meta')
 </head>
 
-<body class="antialiased ">    
-    <x-frontend.navbar />  
-    <livewire:global.page-header />  
+<body class="antialiased ">
+    @unless (request()->routeIs('home') || request()->is('/') || request()->routeIs('stream'))
+        <x-frontend.navbar />
+    @endunless
+
+    
+    <livewire:sections.breaking-news />
     <main class="bg-[#fff]">
         {{ $slot }}
     </main>
-    <livewire:frontend.global-page-footer /> 
+
+ 
+
+    @unless (request()->routeIs('home') || request()->is('/') || request()->routeIs('stream'))
+        <livewire:frontend.global-page-footer />
+    @endunless
+
+
+
     @livewireScripts
+
+
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

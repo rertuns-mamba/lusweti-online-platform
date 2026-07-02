@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +10,12 @@
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     
     <livewire.frontend.google-analytics />
-    <?php echo $__env->yieldContent('meta'); ?>    
+    <?php echo $__env->yieldContent('meta'); ?>
 </head>
 
-<body class="antialiased ">    
-    <?php if (isset($component)) { $__componentOriginal52356ccfc399747292104bf67c421150 = $component; } ?>
+<body class="antialiased ">
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if (! (request()->routeIs('home') || request()->is('/') || request()->routeIs('stream'))): ?>
+        <?php if (isset($component)) { $__componentOriginal52356ccfc399747292104bf67c421150 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal52356ccfc399747292104bf67c421150 = $attributes; } ?>
 <?php $component = App\View\Components\Frontend\Navbar::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('frontend.navbar'); ?>
@@ -34,12 +36,15 @@
 <?php if (isset($__componentOriginal52356ccfc399747292104bf67c421150)): ?>
 <?php $component = $__componentOriginal52356ccfc399747292104bf67c421150; ?>
 <?php unset($__componentOriginal52356ccfc399747292104bf67c421150); ?>
-<?php endif; ?>  
+<?php endif; ?>
+    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+    
     <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('global.page-header', []);
+[$__name, $__params] = $__split('sections.breaking-news', []);
 
 $__keyOuter = $__key ?? null;
 
@@ -60,12 +65,16 @@ unset($__name);
 unset($__params);
 unset($__componentSlots);
 unset($__split);
-?>  
+?>
     <main class="bg-[#fff]">
         <?php echo e($slot); ?>
 
     </main>
-    <?php
+
+ 
+
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if (! (request()->routeIs('home') || request()->is('/') || request()->routeIs('stream'))): ?>
+        <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -90,8 +99,14 @@ unset($__name);
 unset($__params);
 unset($__componentSlots);
 unset($__split);
-?> 
+?>
+    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+
+
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
     <script>
@@ -166,4 +181,5 @@ unset($__split);
 ?>
 </body>
 
-</html><?php /**PATH E:\livestream-apps\lusweti-online-center\resources\views/components/layouts/app.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH E:\livestream-apps\lusweti-online-center\resources\views/components/layouts/app.blade.php ENDPATH**/ ?>

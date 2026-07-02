@@ -13,7 +13,7 @@
                 <div>             
 
 
-                    <a href="/" class="flex items-center space-x-2 sm:space-x-4 group">
+                    <a href="/general-sports" class="flex items-center space-x-2 sm:space-x-4 group">
                             <div class="flex items-center space-x-[2px]">
                                 <span class="bg-white text-black font-black px-1.5 sm:px-2 py-0.5 text-base sm:text-lg tracking-tighter uppercase group-hover:bg-red-600 group-hover:text-white transition-colors">C</span>
                                 <span class="bg-white text-black font-black px-1.5 sm:px-2 py-0.5 text-base sm:text-lg tracking-tighter uppercase group-hover:bg-red-600 group-hover:text-white transition-colors">B</span>

@@ -24,7 +24,7 @@
         }
     ?>
 
-    <section class="relative w-full py-12 md:py- overflow-hidden bg-white font-sans">
+    <section class="relative w-full py-8 md:py- overflow-hidden bg-white font-sans">
 
         
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($this->category): ?>

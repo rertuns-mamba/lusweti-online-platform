@@ -1,4 +1,4 @@
-<div class="max-w-screen-2xl mx-auto  py-8" x-data="{
+<div class="max-w-screen-2xl mx-auto  py-4" x-data="{
     isDown: false,
     startX: 0,
     scrollLeft: 0,

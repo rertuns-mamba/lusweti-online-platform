@@ -106,7 +106,6 @@
 
         </div>
 
-        <div class="mt-12 border-t border-b border-slate-200 py-3 text-center rounded-none bg-transparent"></div>
     </section>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 </div>

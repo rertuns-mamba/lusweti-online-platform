@@ -24,7 +24,7 @@
         }
     @endphp
 
-    <section class="relative w-full py-12 md:py- overflow-hidden bg-white font-sans">
+    <section class="relative w-full py-8 md:py- overflow-hidden bg-white font-sans">
 
         {{-- Category Identity Banner --}}
         @if($this->category)
