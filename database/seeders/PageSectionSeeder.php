@@ -160,6 +160,9 @@ class PageSectionSeeder extends Seeder
                 'is_active' => true,
                 'is_visible' => true,
             ],
+
+
+            
             
 
             [
