@@ -79,9 +79,9 @@
                 <!-- ================================= -->
                 <section class="xl:col-span-8 space-y-8">
 
-                    <div x-data="streamPlayer" class="pb-4">
+                    <div x-data="streamPlayer({ playbackUrl: <?php echo \Illuminate\Support\Js::from($srsPlaybackUrl ?? '')->toHtml() ?> })" class="pb-4">
 
-                        <div x-ref="fullscreenTarget" id="livekitPlayer" @dblclick="toggleFullscreen()"
+                        <div x-ref="fullscreenTarget" id="livekitPlayer" wire:ignore @dblclick="toggleFullscreen()"
                             class="relative w-full overflow-hidden rounded border border-slate-700 bg-black shadow-2xl
            aspect-video
            min-h-[240px]
@@ -180,17 +180,7 @@
 
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($isHost): ?>
                                 <button
-                                    @click="
-    const url = isLive ? '<?php echo e(route('stream.end', $stream->uuid)); ?>' : '<?php echo e(route('stream.start', $stream->uuid)); ?>';
-    isLive ? stopPublishing() : startPublishing();
-    
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    });"
+                                    @click="if (isLive) { stopPublishing(); const xhr = new XMLHttpRequest(); xhr.open('POST', '<?php echo e(route('stream.end', $stream->uuid)); ?>'); xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name=csrf-token]').content); xhr.onload = function() { console.log('Stream end API response:', xhr.status); }; xhr.onerror = function() { console.error('Stream end API failed'); }; xhr.send(); } else { startPublishing(); const xhr = new XMLHttpRequest(); xhr.open('POST', '<?php echo e(route('stream.start', $stream->uuid)); ?>'); xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name=csrf-token]').content); xhr.onload = function() { console.log('Stream start API response:', xhr.status); }; xhr.onerror = function() { console.error('Stream start API failed'); }; xhr.send(); }"
                                     class="group relative overflow-hidden rounded-2xl px-6 py-3 font-bold text-white transition-all active:scale-95 disabled:opacity-50 sm:px-8"
                                     :class="isLive ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20 ring-1 ring-red-500/50' :
                                         'bg-red-600 hover:bg-red-500 ring-1 ring-red-500'">

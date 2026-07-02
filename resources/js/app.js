@@ -1,11 +1,16 @@
 /**
  * 1. IMPORTS & DEPENDENCIES
  */
+import '../css/app.css';
 import './bootstrap'; // Configures Axios / Echo / Reverb
 import Alpine from 'alpinejs';
 import persist from '@alpinejs/persist';
 import { createApp } from 'vue';
 import LivestreamRoom from './components/LivestreamRoom.vue';
+import Hls from 'hls.js';
+
+// Expose Hls globally so legacy inline scripts can access it without CDN
+window.Hls = Hls;
 
 // Initialize Alpine Plugins
 Alpine.plugin(persist);
@@ -689,13 +694,57 @@ document.addEventListener('alpine:init', () => {
     }));
 
     // Stream Player Component (Consolidated)
-    Alpine.data('streamPlayer', () => ({
+    Alpine.data('streamPlayer', (config = {}) => ({
 
-        streamUrl: '',
+        streamUrl: config.playbackUrl || '',
         isFullscreen: false,
+        syncState: null,
+        hlsInstance: null,
+        videoElement: null,
 
         init() {
             this.registerFullscreenListeners();
+            this.$nextTick(() => this.mountHlsPlayback());
+        },
+
+        mountHlsPlayback() {
+            if (!this.streamUrl || this.videoElement) {
+                return;
+            }
+
+            const target = this.getTarget();
+            if (!target) {
+                return;
+            }
+
+            const video = document.createElement('video');
+            video.className = 'absolute inset-0 h-full w-full object-cover';
+            video.setAttribute('playsinline', 'true');
+            video.setAttribute('webkit-playsinline', 'true');
+            video.autoplay = true;
+            video.controls = false;
+            video.muted = true;
+            video.style.backgroundColor = '#000';
+            video.style.zIndex = '0';
+
+            target.prepend(video);
+            this.videoElement = video;
+
+            if (window.Hls && window.Hls.isSupported()) {
+                this.hlsInstance = new window.Hls();
+                this.hlsInstance.attachMedia(video);
+                this.hlsInstance.on(window.Hls.Events.ERROR, (_event, data) => {
+                    if (data && data.fatal) {
+                        console.error('HLS playback failed:', data);
+                    }
+                });
+                this.hlsInstance.loadSource(this.streamUrl);
+                video.play().catch(() => {});
+                return;
+            }
+
+            video.src = this.streamUrl;
+            video.play().catch(() => {});
         },
 
         /**
@@ -803,7 +852,7 @@ document.addEventListener('alpine:init', () => {
          */
         registerFullscreenListeners() {
 
-            const syncState = () => {
+            this.syncState = () => {
 
                 this.isFullscreen = Boolean(
                     document.fullscreenElement ||
@@ -814,17 +863,17 @@ document.addEventListener('alpine:init', () => {
 
             document.addEventListener(
                 'fullscreenchange',
-                syncState
+                this.syncState
             );
 
             document.addEventListener(
                 'webkitfullscreenchange',
-                syncState
+                this.syncState
             );
 
             document.addEventListener(
                 'MSFullscreenChange',
-                syncState
+                this.syncState
             );
         },
 
@@ -832,21 +881,32 @@ document.addEventListener('alpine:init', () => {
          * Cleanup if Livewire destroys component
          */
         destroy() {
+            if (this.hlsInstance) {
+                this.hlsInstance.destroy();
+                this.hlsInstance = null;
+            }
 
-            document.removeEventListener(
-                'fullscreenchange',
-                this.syncState
-            );
+            if (this.videoElement && this.videoElement.parentNode) {
+                this.videoElement.parentNode.removeChild(this.videoElement);
+                this.videoElement = null;
+            }
 
-            document.removeEventListener(
-                'webkitfullscreenchange',
-                this.syncState
-            );
+            if (this.syncState) {
+                document.removeEventListener(
+                    'fullscreenchange',
+                    this.syncState
+                );
 
-            document.removeEventListener(
-                'MSFullscreenChange',
-                this.syncState
-            );
+                document.removeEventListener(
+                    'webkitfullscreenchange',
+                    this.syncState
+                );
+
+                document.removeEventListener(
+                    'MSFullscreenChange',
+                    this.syncState
+                );
+            }
         }
 
     }));

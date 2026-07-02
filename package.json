@@ -3,8 +3,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
-        "dev": "vite"
+        "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vite build",
+        "dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vite"
     },
     "dependencies": {
         "@alpinejs/persist": "^3.15.12",
@@ -27,6 +27,7 @@
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^6.0.7",
+        "cross-env": "^10.1.0",
         "laravel-echo": "^2.3.7",
         "pusher-js": "^8.5.0"
     }

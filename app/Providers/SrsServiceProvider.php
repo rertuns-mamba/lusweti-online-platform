@@ -21,10 +21,10 @@ class SrsServiceProvider extends ServiceProvider
 {
     $this->app->singleton(SrsService::class, function ($app) {
         return new SrsService(
-            new ApiService(),
-            new RtmpService(),
-            new HlsService(),
-            new SrsHookService()
+            $app->make(ApiService::class),
+            $app->make(RtmpService::class),
+            $app->make(HlsService::class),
+            $app->make(SrsHookService::class)
         );
     });
 }

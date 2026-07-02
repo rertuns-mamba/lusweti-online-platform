@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Broadcast\BroadcastService;
+use App\Broadcast\SRS\SrsService;
 use App\Models\Stream;
 use App\Services\LiveKitService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+
 
 class StreamController extends Controller
 {
-    public function index(LiveKitService $liveKitService)
+    public function index(LiveKitService $liveKitService, SrsService $srsService)
     {
         $user = Auth::user();
         $isHost = $user && $user->hasRole('Super Admin');
@@ -40,66 +44,42 @@ class StreamController extends Controller
             $isHost
         );
 
+        $srsPlaybackUrl = null;
+        if ($stream->uuid && $stream->uuid !== 'placeholder') {
+            $srsPlaybackUrl = $srsService->hls->getPlaybackUrl($stream->uuid);
+        }
+
         return view('pages.stream', [
             'token' => $tokenData['token'],
             'livekitUrl' => $tokenData['url'],
             'isHost' => $isHost,
             'stream' => $stream,
+            'srsPlaybackUrl' => $srsPlaybackUrl,
         ]);
     }
 
-    public function end($uuid)
+    public function end($uuid, BroadcastService $broadcastService)
     {
         $stream = Stream::where('uuid', $uuid)->first();
         if ($stream) {
-            $stream->update(['is_live' => false]);
+            $stream->forceFill(['is_live' => false])->save();
+            $broadcastService->stopBroadcast($stream, true);
+            Log::info('Stream ended - UUID: ' . $uuid . ', is_live: false');
         }
+
         return response()->json(['success' => true]);
     }
 
-    public function start($uuid)
+    public function start($uuid, BroadcastService $broadcastService)
     {
         $stream = Stream::where('uuid', $uuid)->first();
         if ($stream) {
-            $stream->update(['is_live' => true]);
+            $stream->forceFill(['is_live' => true])->save();
+            $broadcastService->startBroadcast($stream, Auth::user(), true);
+            Log::info('Stream started - UUID: ' . $uuid . ', is_live: true');
         }
+
         return response()->json(['success' => true]);
     }
 }
 
-// namespace App\Http\Controllers;
-
-// use App\Models\Stream;
-// use App\Services\LiveKitService;
-// use Illuminate\Support\Facades\Auth;
-
-// class StreamController extends Controller
-// {
-//     public function index(LiveKitService $liveKitService)
-//     {
-//         // Get the first active stream or create a placeholder
-//         $stream = Stream::where('is_live', true)->first() ?? new Stream([
-//             'uuid' => 'placeholder',
-//             'title' => 'No Active Stream',
-//             'is_live' => false,
-//         ]);
-
-//         // Check if user is authenticated and should be host
-//         $user = Auth::user();
-//         $isHost = $user && $user->hasRole('Super Admin');
-
-//         // Generate LiveKit token (pass null for guests)
-//         $tokenData = $liveKitService->generateToken(
-//             $user,
-//             $stream->uuid,
-//             $isHost
-//         );
-
-//         return view('pages.stream', [
-//             'token' => $tokenData['token'],
-//             'livekitUrl' => $tokenData['url'],
-//             'isHost' => $isHost,
-//             'stream' => $stream,
-//         ]);
-//     }
-// }

@@ -1,12 +1,15 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 @source "../views";
-@source "../../app/Livewire";
+@source "../../app";
+@source "../../routes";
+@source "../../config";
+@source "../../database";
+@source "../../tests";
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 @custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --color-zinc-50: #fafafa;
@@ -34,12 +37,11 @@
 }
 
 @layer base {
-
     *,
-    ::after,
-    ::before,
-    ::backdrop,
-    ::file-selector-button {
+     ::after,
+     ::before,
+     ::backdrop,
+     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
 }
@@ -75,8 +77,6 @@ select:focus[data-flux-control] {
 }
 
 
-
-
 /* =======================================
    ⚡️ SMOOTH HARDWARE-ACCELERATED TICKER
    ======================================= */
@@ -85,7 +85,6 @@ select:focus[data-flux-control] {
     0% {
         transform: translate3d(0, 0, 0);
     }
-
     100% {
         transform: translate3d(-50%, 0, 0);
         /* Moves exactly half the duplicated content */
@@ -117,12 +116,15 @@ LOGIN CSS
     display: none !important;
 }
 
+
 /* 
 
 =======================
 ROTATING GALLERY CSS 
 ======================
 */
+
+
 /* BBC Typography Fallback (Helvetica/Arial is closest web-safe to Reith Sans) 
 */
 
@@ -235,7 +237,6 @@ ROTATING GALLERY CSS
     from {
         transform: rotateY(0deg);
     }
-
     to {
         transform: rotateY(360deg);
     }
@@ -248,16 +249,13 @@ ROTATING GALLERY CSS
     .news-stage {
         height: 380px;
     }
-
     .news-spinner {
         width: 200px;
         height: 260px;
     }
-
     .news-card {
         transform: rotateY(calc((var(--i) - 1) * (360deg / var(--total)))) translateZ(var(--tablet-radius));
     }
-
     .news-content h3 {
         font-size: 18px;
     }
@@ -270,16 +268,13 @@ ROTATING GALLERY CSS
     .news-stage {
         height: 460px;
     }
-
     .news-spinner {
         width: 240px;
         height: 310px;
     }
-
     .news-card {
         transform: rotateY(calc((var(--i) - 1) * (360deg / var(--total)))) translateZ(var(--desktop-radius));
     }
-
     .news-content h3 {
         font-size: 20px;
     }
@@ -349,21 +344,18 @@ MAGAZINE HOME CSS
     ============================        
 */
 
-
 #livekitPlayer video,
 #livekitPlayer .vjs-tech,
 #livekitPlayer video.vjs-tech {
     position: absolute !important;
     inset: 0 !important;
-
     width: 100% !important;
     height: 100% !important;
-
     object-fit: cover;
     display: block;
-
     background: #000;
 }
+
 
 /* livekit video inherit container */
 
@@ -374,8 +366,8 @@ MAGAZINE HOME CSS
     object-fit: cover;
 }
 
-/* livekit wrapper */
 
+/* livekit wrapper */
 
 #livekitPlayer .lk-video-container,
 #livekitPlayer .lk-video-container video {
@@ -386,6 +378,7 @@ MAGAZINE HOME CSS
 #livekitPlayer .lk-video-container video {
     object-fit: cover;
 }
+
 
 /* mobile full responsive */
 
@@ -401,6 +394,7 @@ MAGAZINE HOME CSS
     height: 100%;
     object-fit: contain;
 }
+
 
 /* #livekitPlayer:fullscreen,
 #livekitPlayer:-webkit-full-screen {

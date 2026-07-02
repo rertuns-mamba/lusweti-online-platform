@@ -49,6 +49,8 @@ class BroadcastService
             $stream->update(['livekit_room' => $roomName]);
         }
 
+        $stream->forceFill(['is_live' => true])->save();
+
         // Generate LiveKit token for host
         $livekitCredentials = $this->livekit->generateToken($user, $roomName, true);
 
@@ -119,18 +121,18 @@ class BroadcastService
         if ($stream->egress_id) {
             if ($async) {
                 dispatch(new StopLiveKitEgress($stream->uuid, $stream->egress_id));
-                $stream->update(['egress_id' => null, 'is_live' => false]);
+                $stream->forceFill(['egress_id' => null, 'is_live' => false])->save();
             } else {
                 $egressStopped = $this->egress->stopEgress($stream->egress_id);
                 if (!$egressStopped) {
                     Log::warning('Failed to stop egress', ['egress_id' => $stream->egress_id]);
                     $success = false;
                 }
-                $stream->update(['egress_id' => null, 'is_live' => false]);
+                $stream->forceFill(['egress_id' => null, 'is_live' => false])->save();
             }
         } else {
             // Just update stream status if no egress
-            $stream->update(['is_live' => false]);
+            $stream->forceFill(['is_live' => false])->save();
         }
 
         Log::info('Broadcast stopped', ['stream_uuid' => $stream->uuid, 'success' => $success]);

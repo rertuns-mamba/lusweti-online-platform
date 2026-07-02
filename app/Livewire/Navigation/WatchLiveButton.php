@@ -18,6 +18,8 @@ class WatchLiveButton extends Component
         // Check if an active stream exists
         $isStreamLive = Stream::where('is_live', true)->exists();
 
+        \Log::info('WatchLiveButton - isAdmin: ' . ($isAdmin ? 'true' : 'false') . ', isStreamLive: ' . ($isStreamLive ? 'true' : 'false'));
+
         return view('livewire.navigation.watch-live-button', [
             'isAdmin' => $isAdmin,
             'isStreamLive' => $isStreamLive,
