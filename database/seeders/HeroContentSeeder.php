@@ -19,12 +19,21 @@ class HeroContentSeeder extends Seeder
     public function run(): void
     {
         $categoryMap = $this->seedCategories();
+        
+        // Homepage with Sports hero section
         $homePage = Page::updateOrCreate(
             ['slug' => 'home'],
-            ['title' => 'News', 'is_active' => true]
+            ['is_active' => true]
         );
-
         $this->seedHomeSections($homePage, $categoryMap);
+        
+        // Burudani page with Burudani hero section
+        $burudaniPage = Page::updateOrCreate(
+            ['slug' => 'burudani'],
+            ['is_active' => true]
+        );
+        $this->seedBurudaniSections($burudaniPage, $categoryMap);
+        
         $this->seedHeroArticles($categoryMap);
     }
 
@@ -34,11 +43,12 @@ class HeroContentSeeder extends Seeder
     protected function seedCategories(): array
     {
         $categoriesData = [
-            // 'sports' => 'Sports',
+            'sports' => 'Sports',
             'business' => 'Business & Technology',
             'spoti-majuu' => 'International Sports',
             'videos' => 'Videos',
             'gallery' => 'Galleries',
+            'burudani' => 'Burudani',
         ];
 
         $categoryMap = [];
@@ -121,6 +131,37 @@ class HeroContentSeeder extends Seeder
     }
 
     /**
+     * Seed hero section for Burudani page
+     * @param  array<string, int>  $categoryMap
+     */
+    protected function seedBurudaniSections(Page $burudaniPage, array $categoryMap): void
+    {
+        $burudaniSections = [
+            [
+                'title' => 'Burudani Highlights',
+                'category_id' => $categoryMap['burudani'],
+                'layout_type' => 'sections.hero',
+                'component' => 'sections.hero',
+                'model_type' => Article::class,
+                'limit' => 10,
+                'sort_order' => 1,
+                'is_active' => true,
+                'is_visible' => true,
+            ],
+        ];
+
+        foreach ($burudaniSections as $section) {
+            PageSection::updateOrCreate(
+                [
+                    'page_id' => $burudaniPage->id,
+                    'layout_type' => $section['layout_type'],
+                ],
+                $section
+            );
+        }
+    }
+
+    /**
      * @param  array<string, int>  $categoryMap
      */
     protected function seedHeroArticles(array $categoryMap): void
@@ -173,6 +214,26 @@ class HeroContentSeeder extends Seeder
             'external_url' => $externalStory['url'],
             'featured_image_thumb_url' => $externalStory['image'],
             'image_path' => $externalStory['image'],
+        ])->save();
+
+        // Burudani hero articles
+        $burudaniImageArticle = $this->upsertHeroArticle(
+            $categoryMap['burudani'],
+            'Burudani Entertainment Spotlight',
+            'A featured entertainment story with local image.',
+            5,
+        );
+        $this->attachFeaturedImage($burudaniImageArticle, $images->get(1) ?? $images->first());
+
+        $burudaniVideoArticle = $this->upsertHeroArticle(
+            $categoryMap['burudani'],
+            'Burudani Video Showcase',
+            'An entertainment video story from local storage.',
+            6,
+        );
+        $this->attachLocalVideo($burudaniVideoArticle, $videos->get(1) ?? $videos->first(), $images->get(2) ?? $images->first());
+        $burudaniVideoArticle->forceFill([
+            'content_type' => 'video',
         ])->save();
     }
 

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            GenerateMediaSeeder::class,
             AdminUserSeeder::class,
             CategorySeeder::class,
             PageSeeder::class,
@@ -31,12 +32,13 @@ class DatabaseSeeder extends Seeder
             BreakingNewsSeeder::class,
             VideoGridSeeder::class,
             GlobalPageFooterSeeder::class,
-            // HeroContentSeeder::class,            
+            HeroContentSeeder::class,            
             // SpotiKenyaSeeder::class,
             SidebarWidgetSeeder::class,
             GalleryGridSeeder::class,
             PortalsSeeder::class,
             SubscriberSeeder::class,
+            CubeSeeder::class,
         ]);
     }
 }

@@ -47,18 +47,18 @@
                 <!-- LEFT SIDEBAR -->
                 <!-- ================================= -->
 
-                <!-- LEFT SIDEBAR -->
                 <aside
-                    class="hidden xl:block xl:col-span-2 sticky top-0 self-start
-                   h-[calc(70vh-1rem)] overflow-y-auto
-                   rounded-xl border border-slate-700 bg-slate-900">
+                    class="hidden xl:flex flex-col xl:col-span-2 sticky top-0 self-start h-[calc(70vh-1rem)] overflow-hidden rounded-xl border border-slate-700 bg-slate-900">
 
-                    <div class="p-4 md:p-10">
-                        <p class="text-3xl text-red-500">Left Sidebar Content</p>
+                    <div class="p-4 md:p-8 flex flex-col h-full w-full">
+                        <p class="text-xl font-semibold text-slate-300 tracking-wider uppercase text-center mb-2">
+                            Live Data Cube
+                        </p>
 
-                        <!-- Your content -->
+                        <div class="flex-1 flex items-center justify-center w-full relative">
+                            <livewire:hover-cube />
+                        </div>
                     </div>
-
                 </aside>
 
 
@@ -135,18 +135,55 @@
                 <!-- ================================= -->
                 <!-- RIGHT SIDEBAR -->
                 <!-- ================================= -->
-
                 <aside
-                    class="hidden xl:block xl:col-span-2 sticky top-0 self-start
-                   h-[calc(70vh-1rem)] overflow-y-auto
-                   rounded-xl border border-slate-700 bg-slate-900">
+                    class="hidden xl:flex flex-col xl:col-span-2 sticky top-0 self-start h-[calc(70vh-1rem)] overflow-hidden rounded-xl border border-slate-700 bg-slate-900 relative">
 
-                    <div class="p-4 md:p-10">
-                        <p class="text-3xl text-red-500">Right Sidebar</p>
-
-                        <!-- Your content -->
+                    <div
+                        class="absolute inset-0 bg-cover bg-center opacity-20 bg-[url('https://images.unsplash.com/photo-1634976276568-9ea10353a8cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxNHx8Z3JlZW4lMjBiYWNrZ3JvdW5kfGVufDB8MHx8fDE3MzY0ODk2NTR8MA&ixlib=rb-4.0.3&q=80&w=1080')]">
                     </div>
+                    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 to-slate-900/90 z-0"></div>
 
+                    <div class="relative z-10 h-full w-full flex flex-col items-center justify-center p-4">
+
+                        <div class="w-full text-center mt-6">
+                            <p class="text-xl font-semibold text-slate-300 tracking-wider uppercase">Coming Next</p>
+                        </div>
+
+                        <div
+                            class="relative flex items-center justify-center animate-[bounce_4s_infinite] w-full flex-1">
+
+                            <div
+                                class="absolute h-[14rem] w-[8rem] rounded-full border-y-8 border-x-4 border-dashed border-green-600/60 flex items-end justify-center pb-2">
+                                <div
+                                    class="animate-[spin_6s_infinite] flex items-center justify-center border-8 border-dashed border-green-500 h-[6rem] w-[6rem] rounded-full text-white">
+                                    <div class="bg-green-400/50 w-full h-full rounded-full"></div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="absolute flex items-center justify-center animate-[spin_6s_infinite] h-[10rem] w-[10rem] rounded-full border-y-8 border-dashed border-red-500">
+                            </div>
+                            <div
+                                class="absolute flex items-center justify-center animate-[spin_6s_infinite] h-[9rem] w-[9rem] rounded-full border-y-4 border-purple-500">
+                            </div>
+                            <div
+                                class="absolute flex items-center justify-center animate-[spin_6s_infinite] h-[8rem] w-[8rem] rounded-full border-y-4 border-pink-500">
+                            </div>
+                            <div
+                                class="absolute flex items-center justify-center animate-[spin_6s_infinite] h-[7rem] w-[7rem] rounded-full border-y-4 border-yellow-500">
+                            </div>
+
+                            <div class="absolute h-[4rem] w-[4rem] rounded-full bg-green-400/50 backdrop-blur-md"></div>
+                        </div>
+
+                        <div class="w-full mb-8">
+                            <p
+                                class="text-3xl lg:text-4xl text-center uppercase font-serif font-bold text-transparent bg-[url('https://images.unsplash.com/photo-1605707159327-f43132f89a5e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80')] bg-contain bg-clip-text animate-textAnime drop-shadow-lg">
+                                Stay Tuned
+                            </p>
+                        </div>
+
+                    </div>
                 </aside>
 
             </div>

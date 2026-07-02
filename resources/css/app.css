@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import '../../vendor/livewire/flux/dist/flux.css';
+@import "tailwindcss";
+@import "../../vendor/livewire/flux/dist/flux.css";
 @source "../views";
 @source "../../app";
 @source "../../routes";
@@ -11,7 +11,7 @@
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 @custom-variant dark (&:where(.dark, .dark *));
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
     --color-zinc-200: #e5e5e5;
@@ -181,7 +181,7 @@ ROTATING GALLERY CSS
     position: absolute;
     inset: 0;
     /* Harsher gradient for maximum text contrast, typical of news sites */
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient( to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0) 100%);
 }
 
 .news-content {
@@ -195,7 +195,7 @@ ROTATING GALLERY CSS
 .news-category {
     display: inline-block;
     /* Authentic BBC News Red */
-    background: #B80000;
+    background: #b80000;
     color: #ffffff;
     font-size: 12px;
     font-weight: bold;
@@ -223,7 +223,7 @@ ROTATING GALLERY CSS
 /* BBC signature: hover creates an underline on the text, rather than scaling the whole box */
 
 .hover-underline {
-    background-image: linear-gradient(transparent calc(100% - 2px), #ffffff 2px);
+    background-image: linear-gradient( transparent calc(100% - 2px), #ffffff 2px);
     background-repeat: no-repeat;
     background-size: 0% 100%;
     transition: background-size 0.3s ease;
@@ -393,6 +393,84 @@ MAGAZINE HOME CSS
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+
+/* ROTATING CUBES */
+
+.scene {
+    perspective: 1000px;
+}
+
+.cube {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotateCube 8s infinite linear;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scene:hover .cube {
+    animation-play-state: paused;
+    transform: scale(1.1) rotateX(0deg) rotateY(0deg);
+    box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.2);
+}
+
+.face {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 2px solid black;
+    font-weight: bold;
+    font-family: sans-serif;
+    transition: all 0.3s ease;
+}
+
+.front {
+    transform: rotateY(0deg) translateZ(60px);
+}
+
+.back {
+    transform: rotateY(180deg) translateZ(60px);
+}
+
+.right {
+    transform: rotateY(90deg) translateZ(60px);
+}
+
+.left {
+    transform: rotateY(-90deg) translateZ(60px);
+}
+
+.top {
+    transform: rotateX(90deg) translateZ(60px);
+}
+
+.bottom {
+    transform: rotateX(-90deg) translateZ(60px);
+}
+
+@keyframes rotateCube {
+    0% {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+    25% {
+        transform: rotateX(90deg) rotateY(180deg);
+    }
+    50% {
+        transform: rotateX(180deg) rotateY(180deg);
+    }
+    75% {
+        transform: rotateX(270deg) rotateY(360deg);
+    }
+    100% {
+        transform: rotateX(360deg) rotateY(720deg);
+    }
 }
 
 

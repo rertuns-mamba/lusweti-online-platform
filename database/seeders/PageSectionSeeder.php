@@ -324,29 +324,31 @@ class PageSectionSeeder extends Seeder
         $burudaniPage = Page::updateOrCreate(['slug' => 'burudani'], ['title' => 'Burudani', 'nav_order' => 4, 'show_in_nav' => true]);
 
         $burudaniSections = [
+
+        //  [
+        //         'title' => 'Latest Sports Highlights',
+        //         'category_id' => $this->getCategoryId('general-sports'),
+        //         'layout_type' => 'sections.hero',
+        //         'component' => 'sections.hero',
+        //         'model_type' => Article::class,
+        //         'limit' => 10,
+        //         'sort_order' => 1,
+        //         'is_active' => true,
+        //         'is_visible' => true,
+        //     ],
             [
                 'title' => 'Sports News',
                 'category_id' => $this->getCategoryId('business'),
                 'layout_type' => 'sections.editorial-grid-block',
                 'component' => 'sections.editorial-grid-block',
                 'model_type' => Article::class,
-                'limit' => 7,
+                'limit' =>7,
                 'sort_order' => 1,
                 'is_active' => true,
                 'is_visible' => true,
             ],
 
-          [
-                'title' => 'Latest Sports Highlights',
-                'category_id' => $this->getCategoryId('general-sports'),
-                'layout_type' => 'sections.hero',
-                'component' => 'sections.hero',
-                'model_type' => Article::class,
-                'limit' => 10,
-                'sort_order' => 1,
-                'is_active' => true,
-                'is_visible' => true,
-            ],
+         
             
             [
                 'title' => 'Burudani',

@@ -4,7 +4,7 @@ namespace App\Livewire\Sections;
 
 use App\Models\PageSection;
 use App\Models\Page;
-use App\Models\Article;
+use App\Models\Gallery;
 use App\Models\Category;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
@@ -34,10 +34,11 @@ class Galleries extends Component
     #[Computed]
     public function collectionItems()
     {
-        // Querying Article model filtered by your Gallery category
-        return Article::query()
+        // Query Gallery model filtered by category
+        return Gallery::query()
             ->where('category_id', $this->section->category_id)
             ->where('is_visible', true)
+            ->where('published_at', '<=', now())
             ->with(['media', 'category']) // Eager-load media and category data to avoid N+1 queries
             ->latest('published_at')
             ->take($this->settings['limit'] ?? 4)

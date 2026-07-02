@@ -17,7 +17,13 @@ class PageSeeder extends Seeder
             'slug' => 'general-sports',
             'is_active' => true,
             'sort_order' => 1,
-        ]);      
-
+        ]);
+        
+        Page::create([
+            'title' => 'Burudani',
+            'slug' => 'burudani',
+            'is_active' => true,
+            'sort_order' => 2,
+        ]);
     }
 }

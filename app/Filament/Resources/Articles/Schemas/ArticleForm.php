@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Filament\Resources\Articles\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
@@ -29,8 +30,12 @@ class ArticleForm
                             ->maxLength(255)
                             ->minLength(5)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (string $operation, $state, Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null
-                            )
+                            ->afterStateUpdated(function (string $operation, ?string $state, Set $set) {
+                                // Auto-generate the slug only during creation so we don't break existing links on edit
+                                if ($operation === 'create' && filled($state)) {
+                                    $set('slug', Str::slug($state));
+                                }
+                            })
                             ->validationMessages([
                                 'required' => 'The article title is required.',
                                 'min' => 'The title must be at least 5 characters.',
@@ -41,6 +46,8 @@ class ArticleForm
                             ->maxLength(255)
                             ->unique(ignoreRecord: true)
                             ->alphaDash()
+                            // Force the field to visually update when the set() method is called by the title
+                            ->live() 
                             ->helperText('Auto-generated from title if left blank.')
                             ->validationMessages([
                                 'unique' => 'This slug is already in use.',
