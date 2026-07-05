@@ -4,8 +4,10 @@
         @foreach($page->sections as $section)
         @livewire($section->component, [
         'page' => $page,
-        'section' => $section, {{-- ADDED: Passes the current section model instance --}}
-        'settings' => $section->settings ?? [] {{-- ADDED: Passes the configuration array safely --}}
+        'section' => $section, 
+        // {{-- ADDED: Passes the current section model instance --}}
+        'settings' => $section->settings ?? [] 
+        // {{-- ADDED: Passes the configuration array safely --}}
         ], key($section->id))
         @endforeach
         

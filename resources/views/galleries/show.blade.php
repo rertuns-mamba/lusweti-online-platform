@@ -1,5 +1,7 @@
 <x-layouts.app :title="$gallery->title">
-    @push('scripts')
+    {{-- Gallery show blade JS--}}
+
+     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 if (window.Echo) {
@@ -22,6 +24,8 @@
             });
         </script>
     @endpush
+
+    
 
     <article class="min-h-screen bg-white text-gray-900 font-sans antialiased">
 

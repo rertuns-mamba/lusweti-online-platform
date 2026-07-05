@@ -20,7 +20,9 @@ $__split = function ($name, $params = []) {
 [$__name, $__params] = $__split($section->component, [
         'page' => $page,
         'section' => $section, 
+        // 
         'settings' => $section->settings ?? [] 
+        // 
         ]);
 
 $__keyOuter = $__key ?? null;

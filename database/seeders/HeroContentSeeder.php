@@ -49,6 +49,7 @@ class HeroContentSeeder extends Seeder
             'videos' => 'Videos',
             'gallery' => 'Galleries',
             'burudani' => 'Burudani',
+            'most-featured' => 'Most Featured', // <-- You need to add this
         ];
 
         $categoryMap = [];
@@ -124,12 +125,14 @@ class HeroContentSeeder extends Seeder
                 [
                     'page_id' => $homePage->id,
                     'layout_type' => $section['layout_type'],
+                    'title'   => $section['title'],
                 ],
                 $section
             );
         }
     }
 
+   
     /**
      * Seed hero section for Burudani page
      * @param  array<string, int>  $categoryMap
@@ -148,13 +151,45 @@ class HeroContentSeeder extends Seeder
                 'is_active' => true,
                 'is_visible' => true,
             ],
+            [
+                'title' => 'Sports News',
+                'category_id' => $categoryMap['business'],
+                'layout_type' => 'sections.editorial-grid-block',
+                'component' => 'sections.editorial-grid-block',
+                'model_type' => Article::class,
+                'limit' => 7,
+                'sort_order' => 1,
+                'is_active' => true,
+                'is_visible' => true,
+            ],
+            [
+                'title' => 'Burudani',
+                'layout_type' => 'sections.most-featured', // Added missing key
+                'component' => 'sections.most-featured',
+                'model_type' => Article::class,
+                'category_id' => $categoryMap['most-featured'],
+                'limit' => 10,
+                'sort_order' => 2,
+                'is_active' => true,
+                'settings' => ['show_sidebar' => true, 'show_video' => false],
+            ],           
+            [
+                'title' => 'Gallery Highlights',
+                'layout_type' => 'sections.galleries', // Added missing key
+                'component' => 'sections.galleries',
+                'model_type' => Article::class,
+                'category_id' => $categoryMap['gallery'],
+                'limit' => 9,
+                'sort_order' => 6,
+                'is_active' => true,
+            ],
         ];
 
         foreach ($burudaniSections as $section) {
             PageSection::updateOrCreate(
                 [
                     'page_id' => $burudaniPage->id,
-                    'layout_type' => $section['layout_type'],
+                    'title'   => $section['title'], // Matching by title is safer for unique records
                 ],
                 $section
             );

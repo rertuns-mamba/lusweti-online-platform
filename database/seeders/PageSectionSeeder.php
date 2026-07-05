@@ -50,7 +50,7 @@ class PageSectionSeeder extends Seeder
         $this->seedSportsKenyaPage();
         $this->seedSportsMajuuPage();
         $this->seedHadithiPage();
-        $this->seedBurudaniPage();
+        // $this->seedBurudaniPage();
     }
 
     /**
@@ -138,7 +138,7 @@ class PageSectionSeeder extends Seeder
 
 
 
-             [
+            [
                 'title' => 'International Sports',
                 'category_id' => $this->getCategoryId('spoti-majuu'),
                 'layout_type' => 'sections.spoti-majuu-block',
@@ -162,8 +162,6 @@ class PageSectionSeeder extends Seeder
             ],
 
 
-            
-            
 
             [
                 'title' => 'Most Featured',
@@ -176,7 +174,7 @@ class PageSectionSeeder extends Seeder
                 'settings' => ['show_sidebar' => true, 'show_video' => false],
             ],
 
-            
+
             [
                 'title' => 'Galla Sports',
                 'component' => 'sections.latest-in-gallery',
@@ -185,9 +183,9 @@ class PageSectionSeeder extends Seeder
                 'limit' => 9,
                 'sort_order' => 3, // Fixed ordering collision
                 'is_active' => true,
-            ],           
-           
-           
+            ],
+
+
             [
                 'title' => 'Video Highlights',
                 'category_id' => $this->getCategoryId('videos'),
@@ -322,69 +320,70 @@ class PageSectionSeeder extends Seeder
 
 
 
-     protected function seedBurudaniPage(): void
-    {
-        $burudaniPage = Page::updateOrCreate(['slug' => 'burudani'], ['title' => 'Burudani', 'nav_order' => 4, 'show_in_nav' => true]);
+    // protected function seedBurudaniPage(): void
+    // {
+    //     $burudaniPage = Page::updateOrCreate(['slug' => 'burudani'], ['title' => 'Burudani', 'nav_order' => 4, 'show_in_nav' => true]);
 
-        $burudaniSections = [
+    //     $burudaniSections = [
 
-        //  [
-        //         'title' => 'Latest Sports Highlights',
-        //         'category_id' => $this->getCategoryId('general-sports'),
-        //         'layout_type' => 'sections.hero',
-        //         'component' => 'sections.hero',
-        //         'model_type' => Article::class,
-        //         'limit' => 10,
-        //         'sort_order' => 1,
-        //         'is_active' => true,
-        //         'is_visible' => true,
-        //     ],
-            [
-                'title' => 'Sports News',
-                'category_id' => $this->getCategoryId('business'),
-                'layout_type' => 'sections.editorial-grid-block',
-                'component' => 'sections.editorial-grid-block',
-                'model_type' => Article::class,
-                'limit' =>7,
-                'sort_order' => 1,
-                'is_active' => true,
-                'is_visible' => true,
-            ],
+    //         //  [
+    //         //         'title' => 'Latest Sports Highlights',
+    //         //         'category_id' => $this->getCategoryId('general-sports'),
+    //         //         'layout_type' => 'sections.hero',
+    //         //         'component' => 'sections.hero',
+    //         //         'model_type' => Article::class,
+    //         //         'limit' => 10,
+    //         //         'sort_order' => 1,
+    //         //         'is_active' => true,
+    //         //         'is_visible' => true,
+    //         //     ],
 
-         
-            
-            [
-                'title' => 'Burudani',
-                'component' => 'sections.most-featured',
-                'model_type' => Article::class,
-                'category_id' => $this->getCategoryId('most-featured'),
-                'limit' => 10,
-                'sort_order' => 2,
-                'is_active' => true,
-                'settings' => ['show_sidebar' => true, 'show_video' => false],
-            ],           
+    //         //     [
+    //         //         'title' => 'Sports News',
+    //         //         'category_id' => $this->getCategoryId('business'),
+    //         //         'layout_type' => 'sections.editorial-grid-block',
+    //         //         'component' => 'sections.editorial-grid-block',
+    //         //         'model_type' => Article::class,
+    //         //         'limit' =>7,
+    //         //         'sort_order' => 1,
+    //         //         'is_active' => true,
+    //         //         'is_visible' => true,
+    //         //     ],
 
 
-           
-            [
-                'title' => 'Gallery Highlights',
-                'component' => 'sections.galleries',
-                'model_type' => Article::class,
-                'category_id' => $this->getCategoryId('gallery'),
-                'limit' => 9,
-                'sort_order' => 6,
-                'is_active' => true,
-            ],
-        ];
 
-        foreach ($burudaniSections as $section) {
-            $burudaniPage->sections()->updateOrCreate(['title' => $section['title']], $section);
-        }
+    //         //     [
+    //         //         'title' => 'Burudani',
+    //         //         'component' => 'sections.most-featured',
+    //         //         'model_type' => Article::class,
+    //         //         'category_id' => $this->getCategoryId('most-featured'),
+    //         //         'limit' => 10,
+    //         //         'sort_order' => 2,
+    //         //         'is_active' => true,
+    //         //         'settings' => ['show_sidebar' => true, 'show_video' => false],
+    //         //     ],           
 
-        // Generate the underlying articles for the Majuu grid
-        $imagePath = $this->resolveImagePath('majuu_sports.jpeg');
-        $this->seedCategoryArticles($this->getCategoryId('spoti-majuu'), $burudaniPage, $imagePath, 'Majuu', 9);
-    }
+
+
+    //         //     [
+    //         //         'title' => 'Gallery Highlights',
+    //         //         'component' => 'sections.galleries',
+    //         //         'model_type' => Article::class,
+    //         //         'category_id' => $this->getCategoryId('gallery'),
+    //         //         'limit' => 9,
+    //         //         'sort_order' => 6,
+    //         //         'is_active' => true,
+    //         //     ],
+    //     ];
+
+    //     foreach ($burudaniSections as $section) {
+    //         $burudaniPage->sections()->updateOrCreate(['title' => $section['title']], $section);
+    //     }
+
+    //     // Generate the underlying articles for the Majuu grid
+    //     $imagePath = $this->resolveImagePath('majuu_sports.jpeg');
+    //     $this->seedCategoryArticles($this->getCategoryId('spoti-majuu'), $burudaniPage, $imagePath, 'Majuu', 9);
+    // }
 
 
     /**
@@ -404,7 +403,7 @@ class PageSectionSeeder extends Seeder
                 'sort_order' => 1,
                 'is_active' => true,
             ],
-             [
+            [
                 'title' => 'Most Featured',
                 'component' => 'sections.most-featured', // ✨ Updated to match what your frontend expects
                 'model_type' => Article::class,

@@ -23,7 +23,7 @@
                 <div class="flex items-center gap-3">
                     <div class="text-sm font-bold tracking-tighter italic">
                         <a href="/general-sports" class="">
-                            <img src="<?php echo e(asset('storage/seed-images/lusweti_edited.png')); ?>" alt=""
+                            <img src="<?php echo e(asset('storage/seed-images/hiyo-logo.png')); ?>" alt=""
                                 class="h-10 w-10 md:h-12 md:w-12  rounded-full">
                         </a>
 
@@ -63,7 +63,7 @@
 
                     <div class="p-4 md:p-8 flex flex-col h-full w-full">
                         <p class="text-xl font-semibold text-slate-300 tracking-wider uppercase text-center mb-2">
-                            Live Data Cube
+                            Advertise Here
                         </p>
 
                         <div class="flex-1 flex items-center justify-center w-full relative">
@@ -133,7 +133,7 @@ unset($__split);
                                 class="absolute  top-1 right-3 z-20 pointer-events-none select-none opacity-40 hover:opacity-80 transition-opacity duration-300">
                                 <div
                                     class="flex items-center gap-2 bg-slate-950/40 backdrop-blur-sm p-1.5 rounded-xl border border-white/5">
-                                    <img src="<?php echo e(asset('storage/seed-images/black.jpg')); ?>" alt="Watermark"
+                                    <img src="<?php echo e(asset('storage/seed-images/hiyo-logo.png')); ?>" alt="Watermark"
                                         class="h-8 w-8 md:h-16 md:w-16 rounded-lg object-cover grayscale contrast-125">
                                 </div>
                             </div>

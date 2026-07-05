@@ -1,4 +1,6 @@
 <x-layouts.app :title="$video->title">
+    {{-- Video Show blade JS --}}
+
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {

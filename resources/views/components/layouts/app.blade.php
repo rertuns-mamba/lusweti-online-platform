@@ -34,6 +34,8 @@
 
     @livewireScripts
 
+   
+
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
